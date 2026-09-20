@@ -66,6 +66,35 @@ Dois estados que uma farmácia precisa e uma loja genérica não tem:
   medicamentos cobertos pelo programa, com selo no cartão e explicação na PDP
   ligando para a página do programa.
 
+## Movimento
+
+Tokens em `:root` (`--mov-rapido`, `--mov-medio`, `--mov-lento` e três curvas)
+governam toda a animação; nenhum componente crava duração própria. Só
+`transform` e `opacity` são animados — o navegador resolve na GPU, sem
+recalcular layout.
+
+- **Revelação ao rolar** (`assets/js/animacoes.js`): um `IntersectionObserver`
+  marca seções, cartões e painéis, com escalonamento de até seis passos dentro
+  de cada grupo de irmãos.
+- **Conteúdo novo entra sozinho.** Um `MutationObserver` no container cobre
+  filtros, paginação e a carga vinda do banco, sem instrumentar cada página.
+- **Cartão de produto** amplia a imagem no hover, o coração pulsa ao favoritar
+  e o contador do carrinho pulsa quando muda.
+- **Painéis que trocam** — aba, acordeão, etapa do checkout, detalhe do pedido
+  — entram com uma subida curta em vez de aparecer secos.
+
+Três cuidados que o movimento exige:
+
+- **Nada pode ficar escondido.** O estado inicial invisível só é aplicado com a
+  classe `js-ativo`, que o próprio script adiciona; sem JS o conteúdo aparece
+  normal. Há ainda uma rede de segurança que revela tudo após 3 s caso o
+  observador falhe.
+- **Cartão em prateleira horizontal fica de fora.** Os que estão à direita
+  nunca intersectam a janela no eixo X e continuariam invisíveis — quem ganha
+  a entrada é a prateleira inteira.
+- **`prefers-reduced-motion` desliga tudo**, inclusive a revelação, que passa a
+  nascer visível.
+
 ## Navegação e checkout
 
 - **Quem gruda é o `#cabecalho`, não o `.cabecalho` de dentro.** `position:
@@ -199,7 +228,7 @@ alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
 
-São sete suítes, somando 201 checagens. O esquema é validado contra um
+São oito suítes, somando 209 checagens. O esquema é validado contra um
 Postgres real: as duas migrations são aplicadas
 do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
 catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste

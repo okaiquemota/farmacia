@@ -640,7 +640,11 @@
     var GATILHO = 50;         // movimento acumulado para trocar de estado
 
     function medir() {
-      documento.documentElement.style.setProperty('--topo-fixo', barra.offsetHeight + 'px');
+      var h = barra.offsetHeight;
+      documento.documentElement.style.setProperty('--topo-fixo', h + 'px');
+      /* guarda a altura do estado expandido: é ela que a margem de rolagem
+         precisa reservar, já que rolar para cima reexpande o cabeçalho */
+      if (!compacto) documento.documentElement.style.setProperty('--topo-cheio', h + 'px');
     }
 
     var compacto = false;
@@ -688,6 +692,34 @@
 
     janela.addEventListener('resize', medir);
     medir();
+  }
+
+  /* ------------------------------------------------------------ âncoras */
+  /* Pular para uma âncora rola a página, o cabeçalho muda de altura no meio do
+     percurso e o navegador reposiciona a rolagem depois de já ter calculado o
+     destino — o alvo acaba encostando no cabeçalho em vez de parar abaixo
+     dele. Reposicionar uma vez, com tudo assentado, resolve sem depender de
+     acertar a margem no chute. */
+  function ligarAncoras() {
+    function reposicionar() {
+      var id = decodeURIComponent(janela.location.hash.slice(1));
+      if (!id) return;
+      var alvo = documento.getElementById(id);
+      if (!alvo) return;
+      janela.setTimeout(function () {
+        alvo.scrollIntoView({ block: 'start', behavior: 'auto' });
+      }, 450);
+    }
+
+    janela.addEventListener('hashchange', reposicionar);
+    if (janela.location.hash) reposicionar();
+
+    /* Foco por teclado que pára parcialmente atrás do cabeçalho é limitação
+       conhecida de cabeçalho preso: o navegador só rola quando o elemento está
+       fora da janela, e atrás do cabeçalho ele conta como dentro. Tentar
+       corrigir por script briga com a rolagem em curso e produz saltos piores
+       que o problema, então fica como está. O scroll-margin-top acima já cobre
+       todos os casos em que o navegador decide rolar. */
   }
 
   function abrirGaveta() {
@@ -837,6 +869,7 @@
     fecharGaveta();
     ligarEventosGlobais();
     ligarCabecalhoFixo();
+    ligarAncoras();
     montarZapFlutuante();
   }
 

@@ -54,6 +54,18 @@
   --sombra-2: 0 4px 12px rgba(19, 31, 69, .08), 0 2px 4px rgba(19, 31, 69, .05);
   --sombra-3: 0 12px 32px rgba(19, 31, 69, .14);
 
+  /* ---------------------------------------------------------------------
+     Movimento. Durações curtas e saída desacelerada: a interface responde
+     rápido ao toque e acomoda devagar. Só transform e opacity são animados,
+     que o navegador resolve na GPU sem recalcular layout.
+     --------------------------------------------------------------------- */
+  --mov-rapido: 140ms;
+  --mov-medio: 260ms;
+  --mov-lento: 420ms;
+  --mov-saida: cubic-bezier(.22, .81, .3, 1);
+  --mov-entrada: cubic-bezier(.4, 0, .2, 1);
+  --mov-elastico: cubic-bezier(.34, 1.56, .64, 1);
+
   --largura: 1240px;
   --fonte: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 }
@@ -63,9 +75,16 @@
 
 html { scroll-behavior: smooth; }
 
-/* Com o cabeçalho preso no topo, pular para uma âncora levava o alvo para
-   trás dele. A margem de rolagem reserva a altura corrente do cabeçalho. */
-[id] { scroll-margin-top: calc(var(--topo-fixo, 128px) + var(--s4)); }
+/* Com o cabeçalho preso no topo, rolar até uma âncora ou até um elemento
+   focado levava o alvo para trás dele.
+
+   A reserva usa --topo-cheio, a altura do cabeçalho EXPANDIDO, não a corrente:
+   pular para uma âncora rola para cima, o que reexpande o cabeçalho logo
+   depois da rolagem terminar; reservar a altura compacta deixaria o alvo
+   coberto. Vale também para focáveis, que o teclado percorre. */
+[id], a, button, input, select, textarea, summary, [tabindex] {
+  scroll-margin-top: calc(var(--topo-cheio, 128px) + var(--s4));
+}
 
 body {
   margin: 0;
@@ -1019,6 +1038,76 @@ ul { margin: 0; padding-left: 1.15rem; }
 .rodape__legal p { margin-bottom: var(--s2); }
 .rodape__legal .miudos { color: #8fb9b2; }
 
+/* ------------------------------------------------------------ movimento */
+
+/* Revelação ao rolar. O estado inicial só vale quando o JS está de pé: sem
+   ele a classe js-ativo não entra e o conteúdo aparece normalmente. */
+.js-ativo .revelar {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--mov-lento) var(--mov-saida) var(--atraso, 0ms),
+              transform var(--mov-lento) var(--mov-saida) var(--atraso, 0ms);
+}
+.js-ativo .revelar.revelado { opacity: 1; transform: none; }
+
+/* entradas nomeadas, para painéis que trocam de conteúdo */
+@keyframes surge-baixo { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes surge       { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulsa       { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.28); } }
+@keyframes brilho      { 100% { background-position: 200% 0; } }
+
+/* cartão de produto: a imagem cresce um pouco e a sombra sobe junto */
+.cartao__figura img { transition: transform var(--mov-medio) var(--mov-saida); }
+.cartao:hover .cartao__figura img { transform: scale(1.06); }
+.cartao__favorito { transition: color var(--mov-rapido), border-color var(--mov-rapido),
+                                background var(--mov-rapido), transform var(--mov-rapido) var(--mov-elastico); }
+.cartao__favorito:active { transform: scale(.88); }
+.cartao__favorito[aria-pressed="true"] { animation: pulsa var(--mov-medio) var(--mov-elastico); }
+
+/* botões: afundam ao toque, em vez do salto seco de translateY */
+.btn { transition: background var(--mov-rapido), border-color var(--mov-rapido),
+                   color var(--mov-rapido), transform var(--mov-rapido) var(--mov-saida),
+                   box-shadow var(--mov-rapido); }
+.btn:active { transform: scale(.97); }
+.btn--compra:hover { box-shadow: 0 4px 14px rgba(224, 33, 40, .32); }
+.btn--principal:hover { box-shadow: 0 4px 14px rgba(35, 57, 126, .28); }
+
+/* contador do carrinho pulsa quando muda */
+.acao__contador.mudou { animation: pulsa var(--mov-medio) var(--mov-elastico); }
+
+/* galeria: a troca de imagem é uma dissolvência, não um corte */
+.galeria__palco img { animation: surge var(--mov-medio) var(--mov-saida); }
+.galeria__miniatura { transition: border-color var(--mov-rapido), transform var(--mov-rapido) var(--mov-saida); }
+.galeria__miniatura:hover { transform: translateY(-2px); }
+
+/* painéis que aparecem: aba, acordeão, detalhe de pedido, etapa do checkout */
+.abas__painel:not([hidden]),
+.acordeao__corpo:not([hidden]),
+.pedido__detalhe:not([hidden]) { animation: surge-baixo var(--mov-medio) var(--mov-saida); }
+.form-checkout, .confirmacao { animation: surge-baixo var(--mov-medio) var(--mov-saida); }
+
+/* passo concluído do checkout */
+.passo__bolha { transition: background var(--mov-medio) var(--mov-saida), color var(--mov-medio); }
+.passo--feito .passo__bolha, .passo--ativo .passo__bolha { animation: pulsa var(--mov-medio) var(--mov-elastico); }
+
+/* atalhos de categoria e cartões de loja */
+.categoria-atalho__icone { transition: transform var(--mov-medio) var(--mov-elastico); }
+.categoria-atalho:hover .categoria-atalho__icone { transform: scale(1.12) rotate(-6deg); }
+.cartao-loja { transition: border-color var(--mov-rapido), box-shadow var(--mov-medio) var(--mov-saida),
+                           transform var(--mov-medio) var(--mov-saida); }
+.cartao-loja:hover { border-color: var(--marca-100); box-shadow: var(--sombra-2); transform: translateY(-2px); }
+
+/* esqueleto enquanto o catálogo remoto não chega */
+.esqueleto {
+  border-radius: var(--r-md); min-height: 320px;
+  background: linear-gradient(100deg, var(--linha) 30%, var(--papel) 50%, var(--linha) 70%);
+  background-size: 200% 100%;
+  animation: brilho 1.2s linear infinite;
+}
+
+/* o botão flutuante entra depois que a página assenta */
+.zap-flutuante { animation: surge-baixo var(--mov-lento) var(--mov-saida) 500ms backwards; }
+
 /* ------------------------------------------------------------ responsivo */
 @media (max-width: 1080px) {
   .pdp { grid-template-columns: 1fr; }
@@ -1090,8 +1179,15 @@ ul { margin: 0; padding-left: 1.15rem; }
   .faixa-ofertas { padding: var(--s4); }
 }
 
+/* Quem pediu menos movimento no sistema recebe a interface parada — inclusive
+   o conteúdo revelado ao rolar, que não pode ficar invisível. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; scroll-behavior: auto !important;
+  }
+  .js-ativo .revelar { opacity: 1 !important; transform: none !important; }
+  .esqueleto { animation: none !important; }
 }
 
 @media print {
