@@ -608,38 +608,60 @@
   }
 
   /* ------------------------------------------------------------ cabeçalho fixo */
-  /* O cabeçalho encolhe depois que a pessoa desce um pouco, devolvendo à página
-     a altura da régua de categorias.
+  /* O cabeçalho encolhe ao descer e volta inteiro ao subir, devolvendo à
+     página a altura da régua de categorias.
 
-     A decisão usa só a posição da rolagem, com uma faixa morta entre 120 e
-     220px. Decidir pela direção do movimento não funciona aqui: encolher o
-     cabeçalho reduz a altura do documento, o navegador dispara novos eventos de
-     rolagem por causa disso, e a direção aparente se inverte — o estado fica
-     piscando. Com histerese, o resultado depende apenas de onde a página está. */
+     A decisão é por direção, que é o que a pessoa espera, mas não pode ser
+     tomada a cada quadro: encolher o cabeçalho encurta o documento, o
+     navegador dispara rolagem por causa disso, e a direção aparente se
+     inverte — o estado fica piscando. Duas defesas resolvem:
+
+       1. um acumulador com limiar, para que um deslocamento de poucos pixels
+          nunca troque o estado;
+       2. ressincronizar a referência depois que o layout assenta, para o
+          próprio salto de altura não ser lido como rolagem da pessoa. */
   function ligarCabecalhoFixo() {
     var barra = documento.querySelector('.cabecalho');
     if (!barra) return;
 
-    var ENCOLHE_EM = 220;
-    var EXPANDE_EM = 120;
+    var ENCOLHE_APOS = 200;   // não encolhe no comecinho da página
+    var VOLTA_ATE = 80;       // perto do topo, sempre inteiro
+    var GATILHO = 50;         // movimento acumulado para trocar de estado
 
     function medir() {
       documento.documentElement.style.setProperty('--topo-fixo', barra.offsetHeight + 'px');
     }
 
     var compacto = false;
+    var ultimo = janela.scrollY;
+    var acumulado = 0;
     var agendado = false;
+
+    function aplicar(novoEstado) {
+      if (novoEstado === compacto) return;
+      compacto = novoEstado;
+      barra.classList.toggle('cabecalho--compacto', compacto);
+      acumulado = 0;
+      janela.requestAnimationFrame(function () {
+        ultimo = janela.scrollY;
+        medir();
+      });
+    }
 
     function aoRolar() {
       agendado = false;
       var y = janela.scrollY;
+      var delta = y - ultimo;
+      ultimo = y;
 
-      if (!compacto && y > ENCOLHE_EM) compacto = true;
-      else if (compacto && y < EXPANDE_EM) compacto = false;
-      else return;
+      if (y <= VOLTA_ATE) { aplicar(false); return; }
 
-      barra.classList.toggle('cabecalho--compacto', compacto);
-      medir();
+      /* inverteu a direção: o acumulado recomeça */
+      if ((delta > 0 && acumulado < 0) || (delta < 0 && acumulado > 0)) acumulado = 0;
+      acumulado += delta;
+
+      if (acumulado > GATILHO && y > ENCOLHE_APOS) aplicar(true);
+      else if (acumulado < -GATILHO) aplicar(false);
     }
 
     janela.addEventListener('scroll', function () {

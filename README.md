@@ -68,13 +68,15 @@ Dois estados que uma farmácia precisa e uma loja genérica não tem:
 
 ## Navegação e checkout
 
-- **Cabeçalho retrátil.** Ao passar de 220px de rolagem ele encolhe de 127px
-  para 61px, escondendo a régua de categorias e devolvendo a altura à página;
-  volta ao completo perto do topo. A decisão usa histerese de posição (faixa
-  morta de 120 a 220px), e não a direção da rolagem — encolher o cabeçalho
-  muda a altura do documento e dispara novos eventos de rolagem, o que faria
-  uma regra por direção oscilar. A altura corrente fica na variável CSS
-  `--topo-fixo`, usada pelos blocos `sticky` para não passarem por baixo dele.
+- **Cabeçalho retrátil.** Descendo, ele encolhe de 127px para 61px e esconde a
+  régua de categorias; subindo, volta inteiro na hora, sem precisar chegar ao
+  topo. A decisão é por direção, mas não pode ser tomada a cada quadro:
+  encolher o cabeçalho encurta o documento, o navegador dispara rolagem por
+  causa disso e a direção aparente se inverte, fazendo o estado piscar. Duas
+  defesas resolvem — um acumulador com limiar de 50px, para que um
+  deslocamento de poucos pixels nunca troque o estado, e a ressincronização da
+  referência depois que o layout assenta. A altura corrente fica na variável
+  CSS `--topo-fixo`, usada pelos blocos `sticky` para não passarem por baixo.
 - **Menu mobile.** Abaixo de 860px a régua de categorias vira uma gaveta
   lateral com categorias, conta e ajuda, aberta pelo hambúrguer.
 - **Checkout em etapas.** Identificação → entrega (com CEP, endereços salvos e
@@ -185,7 +187,7 @@ alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
 
-São quatro suítes, somando 157 checagens. O esquema é validado contra um
+São cinco suítes, somando 174 checagens. O esquema é validado contra um
 Postgres real: as duas migrations são aplicadas
 do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
 catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste
