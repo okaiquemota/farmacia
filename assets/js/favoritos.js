@@ -8,7 +8,7 @@
   var L = janela.Loja;
 
   function favoritos() {
-    return L.recuperar('bv:favoritos', []).map(function (s) { return D.porSku(s); }).filter(Boolean);
+    return L.recuperar('dsc:favoritos', []).map(function (s) { return D.porSku(s); }).filter(Boolean);
   }
 
   function desenhar() {

@@ -15,7 +15,7 @@
     ['pedidos', 'Meus pedidos', 'sacola'],
     ['dados', 'Meus dados', 'usuario'],
     ['enderecos', 'Endereços', 'local'],
-    ['clube', 'Clube Bem Viver', 'coracao']
+    ['clube', 'Clube São Carlos', 'coracao']
   ];
 
   /* ------------------------------------------------------------ deslogado */
@@ -40,7 +40,7 @@
       '<section class="painel">' +
         '<h2 class="painel__titulo">Criar conta</h2>' +
         '<p style="font-size:13.5px;color:var(--tinta-500);margin-top:-8px">' +
-        'O cadastro é gratuito e já entra no Clube Bem Viver, com até 15% de desconto.</p>' +
+        'O cadastro é gratuito e já entra no Clube São Carlos, com até 15% de desconto.</p>' +
         '<form class="form-checkout" data-cadastrar>' +
           '<div class="campos">' +
             '<div class="campo campo--largo"><label for="n-nome">Nome completo</label>' +
@@ -183,7 +183,7 @@
     var economia = gasto * CFG.descontoClube;
 
     return '<div class="painel"><h2 class="painel__titulo">' +
-        L.icone('coracao', 18, true) + ' Clube Bem Viver</h2>' +
+        L.icone('coracao', 18, true) + ' Clube São Carlos</h2>' +
       '<p style="font-size:14px;color:var(--tinta-700)">Sua assinatura está <strong>ativa</strong> ' +
       'e é gratuita. O preço de clube já aparece aplicado em todas as páginas de produto.</p>' +
       '<div class="numeros" style="margin-top:20px">' +
@@ -259,7 +259,7 @@
           cpf: documento.getElementById('n-cpf').value.trim(),
           telefone: documento.getElementById('n-tel').value.trim()
         });
-        L.aviso('Conta criada! Você já está no Clube Bem Viver.', 'ok');
+        L.aviso('Conta criada! Você já está no Clube São Carlos.', 'ok');
         janela.location.href = 'conta.html';
         return;
       }

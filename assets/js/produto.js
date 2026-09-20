@@ -127,7 +127,7 @@
       '</div>' +
 
       (clube ? '<div class="compra__clube">' +
-        '<b>' + L.icone('coracao', 14, true) + ' Preço Clube Bem Viver</b>' +
+        '<b>' + L.icone('coracao', 14, true) + ' Preço Clube São Carlos</b>' +
         '<span class="valor">' + L.moeda(clube) + '</span>' +
         '<small>Economize ' + L.moeda(preco - clube) + ' — a assinatura do clube é gratuita.</small>' +
       '</div>' : '') +

@@ -430,7 +430,7 @@
       '</div>';
 
     /* cupom aplicado no carrinho continua valendo aqui */
-    var codigo = L.recuperar('bv:cupom', null);
+    var codigo = L.recuperar('dsc:cupom', null);
     if (codigo && CFG.cupons[codigo]) {
       estado.cupom = { codigo: codigo, tipo: CFG.cupons[codigo].tipo, valor: CFG.cupons[codigo].valor };
     }

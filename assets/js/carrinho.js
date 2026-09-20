@@ -184,7 +184,7 @@
         '<button class="btn btn--neutro" type="button" data-cupom>Aplicar</button>' +
       '</div>' +
       '<p style="font-size:11.5px;color:var(--tinta-500);margin:-4px 0 0">' +
-        'Experimente: <code>BEMVIVER10</code>, <code>PRIMEIRA20</code> ou <code>FRETEGRATIS</code>.</p>' +
+        'Experimente: <code>SAOCARLOS10</code>, <code>PRIMEIRA20</code> ou <code>FRETEGRATIS</code>.</p>' +
 
       '<div class="resumo__total"><span>Total</span><span>' + L.moeda(tot) + '</span></div>' +
       '<p class="compra__pix" style="margin:6px 0 0">' + L.icone('pix', 15) +
@@ -206,7 +206,7 @@
     if (!L.itensCarrinho().length) { L.aviso('Adicione produtos ao carrinho.', 'erro'); return; }
     if (!freteEscolhido) { L.aviso('Informe seu CEP para calcular o frete.', 'erro'); return; }
 
-    var numero = 'BV-' + String(Math.floor(Math.random() * 900000) + 100000);
+    var numero = 'DSC-' + String(Math.floor(Math.random() * 900000) + 100000);
     var valorTotal = total();
     var entrega = freteEscolhido.prazo;
 
@@ -321,7 +321,7 @@
       if (e.target.closest('[data-cupom]')) {
         var campo = documento.getElementById('cupom');
         var codigo = campo.value.trim().toUpperCase();
-        if (!codigo) { cupomAtivo = null; L.guardar('bv:cupom', null); desenharResumo(); return; }
+        if (!codigo) { cupomAtivo = null; L.guardar('dsc:cupom', null); desenharResumo(); return; }
 
         var regra = CFG.cupons[codigo];
         if (!regra) { L.aviso('Cupom inválido ou expirado.', 'erro'); return; }
@@ -330,7 +330,7 @@
           return;
         }
         cupomAtivo = { codigo: codigo, tipo: regra.tipo, valor: regra.valor };
-        L.guardar('bv:cupom', codigo);
+        L.guardar('dsc:cupom', codigo);
         L.aviso('Cupom aplicado: ' + regra.descricao + '.', 'ok');
         desenharResumo();
       }

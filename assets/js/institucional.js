@@ -8,91 +8,100 @@
   var L = janela.Loja;
   var CFG = D.config;
 
-  var LOJAS = [
-    { nome: 'Bem Viver Pinheiros', end: 'Rua das Acácias, 1.200 — Pinheiros, São Paulo/SP',
-      hora: 'Seg. a sáb., 7h às 22h · Dom., 8h às 20h', tel: '(11) 4000-0001', servicos: ['Farmácia 24h aos sábados', 'Aplicação de injetáveis', 'Aferição de pressão'] },
-    { nome: 'Bem Viver Santana', end: 'Av. Brasilândia, 85 — Santana, São Paulo/SP',
-      hora: 'Seg. a sáb., 8h às 21h', tel: '(11) 4000-0002', servicos: ['Retirada de pedidos online', 'Aferição de glicemia'] },
-    { nome: 'Bem Viver Copacabana', end: 'Rua Barão de Ipanema, 340 — Copacabana, Rio de Janeiro/RJ',
-      hora: 'Todos os dias, 7h às 23h', tel: '(21) 4000-0003', servicos: ['Aberta todos os dias', 'Aplicação de injetáveis', 'Teste de COVID-19'] },
-    { nome: 'Bem Viver Savassi', end: 'Rua Pernambuco, 1.410 — Savassi, Belo Horizonte/MG',
-      hora: 'Seg. a sáb., 8h às 22h', tel: '(31) 4000-0004', servicos: ['Retirada de pedidos online', 'Sala de serviços farmacêuticos'] }
-  ];
-
   var FAQ = [
+    ['Vocês entregam em casa?',
+     'Sim. Hoje a entrega é pedida pelo Disk Entrega no WhatsApp ' + CFG.whatsapp +
+     ', com número exclusivo para Ribeirão Preto. Com a loja online, o mesmo pedido passa a ' +
+     'poder ser fechado pelo próprio cliente, a qualquer hora, com o frete calculado pelo CEP.'],
     ['Qual o prazo de entrega?',
-     'Depende do seu CEP. Nas capitais e regiões metropolitanas atendidas, a entrega expressa chega em até 2 horas. ' +
-     'A entrega padrão leva de 2 a 9 dias úteis conforme a região. O prazo exato aparece na página do produto ' +
-     'e no carrinho assim que você informa o CEP.'],
+     'Nas cidades onde a rede tem loja, a entrega expressa chega em até 2 horas. ' +
+     'Para os demais CEPs, a entrega padrão leva de 2 a 9 dias úteis. ' +
+     'O prazo exato aparece na página do produto assim que você informa o CEP.'],
     ['Como funciona o frete grátis?',
-     'Pedidos a partir de ' + L.moeda(CFG.freteGratisAcima) + ' têm frete grátis na modalidade padrão para todo o Brasil. ' +
+     'Pedidos a partir de ' + L.moeda(CFG.freteGratisAcima) + ' têm frete grátis na modalidade padrão. ' +
      'A entrega expressa continua sendo cobrada à parte.'],
     ['Posso retirar o pedido em uma loja?',
-     'Sim, e a retirada é sempre gratuita. Escolha "Retirar na loja mais próxima" no carrinho. ' +
-     'Avisamos por e-mail quando o pedido estiver separado — normalmente em até 4 horas.'],
+     'Sim, e a retirada é sempre gratuita. Com ' + CFG.totalLojas + ' unidades em ' +
+     CFG.cidades.length + ' cidades, quase sempre há uma loja perto de você. ' +
+     'Escolha "Retirar na loja mais próxima" no carrinho.'],
+    ['Como funciona a Farmácia Popular?',
+     'O programa do Ministério da Saúde oferece medicamentos gratuitos para hipertensão, ' +
+     'diabetes e asma, e com desconto para outras condições. Leve documento com foto, CPF e a ' +
+     'receita médica dentro da validade até uma das lojas credenciadas. ' +
+     '<a href="institucional.html?p=farmacia-popular">Veja os detalhes</a>.'],
     ['Vocês vendem medicamentos com receita?',
-     'Medicamentos sujeitos a prescrição exigem a apresentação da receita válida. ' +
-     'No site trabalhamos com medicamentos isentos de prescrição (MIP), dermocosméticos, ' +
-     'suplementos e itens de higiene. Para receituário, procure uma de nossas lojas.'],
-    ['Como funciona o Clube Bem Viver?',
-     'A assinatura é gratuita. Com o CPF cadastrado, você paga o preço de clube — até 15% abaixo do preço normal — ' +
-     'e acumula histórico de compras para receber lembretes de recompra dos seus medicamentos de uso contínuo.'],
-    ['Posso trocar ou devolver um produto?',
-     'Sim. Você tem 7 dias corridos a partir do recebimento para desistir da compra, conforme o Código de Defesa ' +
-     'do Consumidor. Por segurança sanitária, medicamentos e produtos de higiene pessoal só são aceitos de volta ' +
-     'com a embalagem lacrada e intacta.'],
+     'Medicamentos sujeitos a prescrição exigem a apresentação da receita válida e são ' +
+     'dispensados na loja, com orientação do farmacêutico. Pelo site trabalhamos com ' +
+     'medicamentos isentos de prescrição, dermocosméticos, suplementos e higiene.'],
     ['Quais as formas de pagamento?',
-     'PIX (com 5% de desconto), cartão de crédito em até ' + CFG.parcelasMax + 'x sem juros e boleto bancário. ' +
-     'O parcelamento respeita a parcela mínima de ' + L.moeda(CFG.parcelaMinima) + '.'],
-    ['Como falo com um farmacêutico?',
-     'Nosso time farmacêutico atende de segunda a sábado pelo telefone ' + CFG.telefone + ' e pelo chat do site. ' +
-     'O atendimento é gratuito e não substitui uma consulta médica.']
+     'PIX (com 5% de desconto), cartão de crédito em até ' + CFG.parcelasMax + 'x sem juros e ' +
+     'boleto bancário. O parcelamento respeita a parcela mínima de ' + L.moeda(CFG.parcelaMinima) + '.'],
+    ['Posso trocar ou devolver um produto?',
+     'Sim. São 7 dias corridos a partir do recebimento para desistir da compra, conforme o ' +
+     'Código de Defesa do Consumidor. Por segurança sanitária, medicamentos e produtos de ' +
+     'higiene só são aceitos de volta com a embalagem lacrada e intacta.']
   ];
 
   /* --------------------------------------------------------------------- */
   var PAGINAS = {
     'quem-somos': {
       titulo: 'Quem somos',
-      resumo: 'Uma rede de farmácias de bairro que cresceu sem abrir mão do atendimento de perto.',
+      resumo: 'Mais de 50 anos cuidando da saúde no interior paulista.',
       corpo:
-        '<p>A Drogaria Bem Viver nasceu em 2011 como uma farmácia de bairro em Pinheiros, São Paulo. ' +
-        'A proposta era simples e continua a mesma: ter um farmacêutico disponível para conversar, ' +
-        'preço justo em genéricos e um estoque que realmente atenda a vizinhança.</p>' +
-        '<p>Hoje são quatro lojas em três estados e uma operação online que entrega para todo o Brasil. ' +
-        'O que não mudou foi o atendimento: toda loja tem farmacêutico presente em horário integral, ' +
-        'e o mesmo time responde pelo chat e pelo telefone.</p>' +
-        '<h2>No que acreditamos</h2>' +
-        '<ul>' +
-        '<li><strong>Genérico é remédio.</strong> Trabalhamos com genéricos em todas as classes em que eles existem, ' +
-        'e explicamos a equivalência sempre que perguntam.</li>' +
-        '<li><strong>Informação antes da venda.</strong> Se o produto não é o indicado para o seu caso, ' +
-        'nosso time vai dizer isso — mesmo que a venda não aconteça.</li>' +
-        '<li><strong>Preço sem letra miúda.</strong> O preço do clube aparece junto do preço normal, ' +
-        'em todas as páginas, sem exigir cadastro para ser visto.</li>' +
-        '</ul>' +
-        '<h2>Números</h2>' +
+        '<p>A Drogaria São Carlos começou em <strong>' + CFG.fundacao + '</strong>, pelas mãos de ' +
+        CFG.fundador + '. De uma farmácia de bairro, a rede cresceu para ' +
+        '<strong>' + CFG.totalLojas + ' lojas</strong> distribuídas em ' +
+        CFG.cidades.slice(0, -1).join(', ') + ' e ' + CFG.cidades[CFG.cidades.length - 1] + '.</p>' +
+        '<p>Em mais de cinco décadas, a receita não mudou: atendimento próximo, farmacêutico ' +
+        'disponível para orientar e um mix que vai do genérico de todo dia ao dermocosmético, ' +
+        'com mais de 3.000 medicamentos de marca e genéricos à disposição.</p>' +
+        '<h2>A rede hoje</h2>' +
         '<div class="numeros">' +
-          '<div class="numero"><b>2011</b><span>ano de fundação</span></div>' +
-          '<div class="numero"><b>4</b><span>lojas físicas</span></div>' +
-          '<div class="numero"><b>3</b><span>estados atendidos</span></div>' +
-          '<div class="numero"><b>+180 mil</b><span>pedidos entregues</span></div>' +
-        '</div>'
+          '<div class="numero"><b>' + CFG.fundacao + '</b><span>ano de fundação</span></div>' +
+          '<div class="numero"><b>' + (new Date().getFullYear() - CFG.fundacao) + '</b><span>anos de estrada</span></div>' +
+          '<div class="numero"><b>' + CFG.totalLojas + '</b><span>lojas</span></div>' +
+          '<div class="numero"><b>' + CFG.cidades.length + '</b><span>cidades atendidas</span></div>' +
+        '</div>' +
+        '<h2>O que oferecemos além do balcão</h2>' +
+        '<ul>' +
+        '<li><strong>Serviços farmacêuticos</strong> nas lojas: aferição de pressão e glicemia e ' +
+          'aplicação de injetáveis com profissional habilitado.</li>' +
+        '<li><strong>Farmácia Popular</strong>, com medicamentos gratuitos ou subsidiados pelo ' +
+          'programa do Ministério da Saúde.</li>' +
+        '<li><strong>Atendimento 24 horas</strong> em unidades selecionadas.</li>' +
+        '<li><strong>Disk Entrega</strong> pelo WhatsApp ' + CFG.whatsapp + ', para Ribeirão Preto.</li>' +
+        '</ul>' +
+        '<p><a class="btn btn--principal" href="institucional.html?p=lojas">Ver as lojas</a></p>'
     },
 
     'lojas': {
       titulo: 'Nossas lojas',
-      resumo: 'Quatro unidades com farmacêutico presente em horário integral.',
-      corpo: '<div class="grade-lojas">' + LOJAS.map(function (l) {
-        return '<article class="cartao-loja">' +
-          '<h2>' + L.escapar(l.nome) + '</h2>' +
-          '<p class="cartao-loja__linha">' + L.icone('local', 15) + ' ' + L.escapar(l.end) + '</p>' +
-          '<p class="cartao-loja__linha">' + L.icone('relogio', 15) + ' ' + L.escapar(l.hora) + '</p>' +
-          '<p class="cartao-loja__linha">' + L.icone('chat', 15) + ' ' + L.escapar(l.tel) + '</p>' +
-          '<ul class="ficha__beneficios">' + l.servicos.map(function (s) {
-            return '<li>' + L.icone('cheque', 15) + '<span>' + L.escapar(s) + '</span></li>';
-          }).join('') + '</ul>' +
-        '</article>';
-      }).join('') + '</div>'
+      resumo: CFG.totalLojas + ' unidades em ' + CFG.cidades.length + ' cidades do interior paulista.',
+      corpo:
+        '<div class="filtro-cidades">' +
+          '<button class="ficha-ativa" type="button" data-cidade="" aria-pressed="true">Todas</button>' +
+          CFG.cidades.map(function (c) {
+            return '<button class="ficha-ativa" type="button" data-cidade="' + L.escapar(c) +
+              '" aria-pressed="false">' + L.escapar(c) + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="grade-lojas" id="grade-lojas">' + D.lojas.map(function (l) {
+          return '<article class="cartao-loja" data-cidade-loja="' + L.escapar(l.cidade) + '">' +
+            '<h2>' + L.escapar(l.nome) + (l.numero ? ' <small style="font-weight:600;color:var(--tinta-500)">' +
+              L.escapar(l.numero) + '</small>' : '') + '</h2>' +
+            '<p class="cartao-loja__linha">' + L.icone('local', 15) + ' ' +
+              L.escapar(l.cidade + '/' + l.uf) + '</p>' +
+            '<p class="cartao-loja__linha">' + L.icone('relogio', 15) +
+              ' <span class="pendente">horário a confirmar</span></p>' +
+            '<p class="cartao-loja__linha">' + L.icone('chat', 15) +
+              ' <span class="pendente">telefone a confirmar</span></p>' +
+            '<a class="btn btn--contorno" href="institucional.html?p=servicos">Serviços da unidade</a>' +
+          '</article>';
+        }).join('') + '</div>' +
+        '<div class="aviso-legal"><strong>Lista parcial nesta demonstração</strong>' +
+        'Estão aqui as ' + D.lojas.length + ' unidades que localizamos em fontes públicas, das ' +
+        CFG.totalLojas + ' da rede. Endereços, telefones e horários entram com a lista oficial — ' +
+        'não foram preenchidos para não publicar informação inventada no nome da Drogaria São Carlos.</div>'
     },
 
     'trabalhe-conosco': {
@@ -116,44 +125,114 @@
         '</div>'
     },
 
-    'clube': {
-      titulo: 'Clube Bem Viver',
-      resumo: 'Programa de fidelidade gratuito com até 15% de desconto em todo o site.',
+    'servicos': {
+      titulo: 'Serviços',
+      resumo: 'O que a rede faz além de vender medicamento.',
       corpo:
-        '<p>O Clube Bem Viver é gratuito e não tem mensalidade. Basta cadastrar seu CPF para pagar o preço ' +
-        'de clube — que aparece em todas as páginas de produto, ao lado do preço normal.</p>' +
-        '<h2>O que você ganha</h2>' +
+        '<div class="grade-lojas">' + D.servicos.map(function (s) {
+          return '<article class="cartao-loja" id="' + s.id + '">' +
+            '<span class="servico-icone">' + L.icone(s.icone, 22) + '</span>' +
+            '<h2>' + L.escapar(s.titulo) + '</h2>' +
+            '<p style="font-size:13.5px;color:var(--tinta-700)">' + L.escapar(s.texto) + '</p>' +
+          '</article>';
+        }).join('') + '</div>' +
+        '<h2>Agendar um serviço</h2>' +
+        '<p>Escolha a unidade e o serviço e a equipe confirma o horário com você.</p>' +
+        '<form class="form-avaliacao" style="max-width:520px" data-contato>' +
+          '<div><label for="ag-servico">Serviço</label>' +
+            '<select id="ag-servico" style="width:100%;border:1.5px solid var(--linha);border-radius:8px;padding:10px 12px">' +
+            D.servicos.filter(function (s) { return s.id !== 'entrega'; })
+              .map(function (s) { return '<option>' + L.escapar(s.titulo) + '</option>'; }).join('') +
+            '</select></div>' +
+          '<div><label for="ag-loja">Unidade</label>' +
+            '<select id="ag-loja" style="width:100%;border:1.5px solid var(--linha);border-radius:8px;padding:10px 12px">' +
+            D.lojas.map(function (l) {
+              return '<option>' + L.escapar(l.nome + ' — ' + l.cidade) + '</option>';
+            }).join('') + '</select></div>' +
+          '<div><label for="ag-nome">Seu nome</label><input id="ag-nome" required></div>' +
+          '<div><label for="ag-tel">Telefone com DDD</label><input id="ag-tel" required></div>' +
+          '<button class="btn btn--principal" type="submit" style="justify-self:start">Pedir agendamento</button>' +
+        '</form>' +
+        '<div class="aviso-legal"><strong>Importante</strong>Os serviços farmacêuticos são de ' +
+        'acompanhamento e orientação. Não substituem consulta médica, diagnóstico nem exame ' +
+        'laboratorial.</div>'
+    },
+
+    'farmacia-popular': {
+      titulo: 'Farmácia Popular',
+      resumo: 'Medicamentos gratuitos ou com desconto pelo programa do Ministério da Saúde.',
+      corpo:
+        '<p>A Drogaria São Carlos é credenciada ao <strong>Farmácia Popular</strong>, programa do ' +
+        'Ministério da Saúde que garante medicamentos gratuitos ou com desconto em farmácias ' +
+        'privadas.</p>' +
+        '<h2>O que o programa cobre</h2>' +
+        '<table class="tabela-specs"><tbody>' +
+          '<tr><th scope="row">Gratuitos</th><td>Medicamentos para hipertensão, diabetes e asma.</td></tr>' +
+          '<tr><th scope="row">Com desconto</th><td>Tratamentos para dislipidemia, osteoporose, ' +
+            'rinite, glaucoma, doença de Parkinson e anticoncepcionais.</td></tr>' +
+        '</tbody></table>' +
+        '<h2>O que levar</h2>' +
         '<ul>' +
-        '<li>Até 15% de desconto em todo o catálogo, todos os dias.</li>' +
-        '<li>Lembretes de recompra dos medicamentos de uso contínuo, no ritmo da sua receita.</li>' +
-        '<li>Histórico de compras disponível para apresentar no imposto de renda ou ao seu médico.</li>' +
-        '<li>Cupons exclusivos por e-mail, sem disparo mais de uma vez por semana.</li>' +
+        '<li>Documento oficial com foto.</li>' +
+        '<li>CPF do paciente.</li>' +
+        '<li>Receita médica dentro da validade, com nome do paciente e do prescritor.</li>' +
         '</ul>' +
-        '<h2>O que fazemos com seus dados</h2>' +
-        '<p>Usamos seu CPF apenas para identificar suas compras e aplicar o desconto. ' +
-        'Não vendemos nem compartilhamos dados de saúde com terceiros. Você pode pedir a exclusão ' +
-        'do cadastro a qualquer momento pelo <a href="institucional.html?p=lgpd">portal do titular</a>.</p>' +
-        '<p><a class="btn btn--principal" href="conta.html">Criar minha conta</a></p>'
+        '<p>A retirada é feita na loja, com o farmacêutico. Traga a receita mesmo para os ' +
+        'medicamentos gratuitos — ela é exigida pelo programa.</p>' +
+        '<div class="aviso-legal"><strong>Confira antes de ir</strong>A lista de medicamentos e as ' +
+        'regras do programa são definidas pelo Ministério da Saúde e mudam periodicamente. ' +
+        'Consulte a unidade mais próxima ou os canais oficiais do programa para confirmar a ' +
+        'cobertura do seu caso.</div>' +
+        '<p><a class="btn btn--principal" href="institucional.html?p=lojas">Encontrar uma loja</a></p>'
+    },
+
+    'clube': {
+      titulo: 'Clube São Carlos',
+      resumo: 'Programa de fidelidade proposto: desconto em todo o site, sem mensalidade.',
+      corpo:
+        '<div class="aviso-legal"><strong>Proposta, ainda não é um programa existente</strong>' +
+        'O Clube São Carlos é uma sugestão desta proposta, não um programa em operação hoje. ' +
+        'Nome, percentual de desconto e regras são pontos a definir com a rede.</div>' +
+        '<p>A ideia é simples: o cliente cadastra o CPF e passa a pagar o preço de clube, ' +
+        'exibido ao lado do preço normal em todas as páginas — sem exigir login para ser visto.</p>' +
+        '<h2>Por que vale para a rede</h2>' +
+        '<ul>' +
+        '<li><strong>Liga a loja física à online.</strong> O mesmo CPF identifica a compra no ' +
+          'balcão e no site, e o histórico passa a ser um só.</li>' +
+        '<li><strong>Lembrete de recompra.</strong> Quem usa medicamento contínuo recebe um aviso ' +
+          'no ritmo da receita, o que reduz o abandono de tratamento e traz o cliente de volta.</li>' +
+        '<li><strong>Base própria.</strong> Em vez de depender de marketplace, a rede fala direto ' +
+          'com quem já compra.</li>' +
+        '</ul>' +
+        '<h2>Cuidado com os dados</h2>' +
+        '<p>Histórico de compra de medicamento é dado sensível de saúde pela LGPD. ' +
+        'O programa precisa nascer com finalidade declarada, consentimento para os lembretes e ' +
+        'exclusão a pedido — nada de compartilhar com anunciante, seguradora ou plano de saúde. ' +
+        'Isso está previsto na <a href="institucional.html?p=privacidade">política de privacidade</a>.</p>'
     },
 
     'atendimento': {
       titulo: 'Central de atendimento',
-      resumo: 'Fale com nosso time — inclusive com um farmacêutico.',
+      resumo: 'Disk Entrega, telefone e atendimento farmacêutico.',
       corpo:
         '<div class="grade-lojas">' +
-          '<article class="cartao-loja"><h2>Telefone</h2>' +
-            '<p class="cartao-loja__linha">' + L.icone('chat', 15) + ' ' + CFG.telefone + '</p>' +
-            '<p>Segunda a sexta, das 8h às 20h. Sábados, das 8h às 14h.</p></article>' +
-          '<article class="cartao-loja"><h2>Chat com farmacêutico</h2>' +
-            '<p class="cartao-loja__linha">' + L.icone('escudo', 15) + ' Atendimento gratuito</p>' +
-            '<p>Tire dúvidas sobre posologia, interações e uso de medicamentos isentos de prescrição. ' +
+          '<article class="cartao-loja destaque-zap"><h2>Disk Entrega</h2>' +
+            '<p class="cartao-loja__linha">' + L.icone('chat', 15) + ' <strong>' + CFG.whatsapp + '</strong></p>' +
+            '<p>Peça pelo WhatsApp e receba em casa. Número exclusivo para Ribeirão Preto.</p>' +
+            '<a class="btn btn--principal" href="' + CFG.whatsappLink + '" rel="noopener">Chamar no WhatsApp</a>' +
+          '</article>' +
+          '<article class="cartao-loja"><h2>Atendimento 24 horas</h2>' +
+            '<p class="cartao-loja__linha">' + L.icone('relogio', 15) + ' Unidades de plantão</p>' +
+            '<p>Parte da rede opera em regime de plantão. Confira quais unidades na ' +
+            '<a href="institucional.html?p=lojas">página de lojas</a>.</p></article>' +
+          '<article class="cartao-loja"><h2>Orientação farmacêutica</h2>' +
+            '<p class="cartao-loja__linha">' + L.icone('escudo', 15) + ' Gratuita, nas lojas</p>' +
+            '<p>Dúvidas sobre posologia, interações e uso de medicamentos isentos de prescrição. ' +
             'Não substitui consulta médica.</p></article>' +
-          '<article class="cartao-loja"><h2>E-mail</h2>' +
-            '<p class="cartao-loja__linha">' + L.icone('usuario', 15) + ' atendimento@bemviver.exemplo</p>' +
-            '<p>Respondemos em até 1 dia útil.</p></article>' +
           '<article class="cartao-loja"><h2>Farmacovigilância</h2>' +
-            '<p class="cartao-loja__linha">' + L.icone('escudo', 15) + ' Reação adversa a medicamento</p>' +
-            '<p>Se você teve uma reação inesperada, avise-nos. Registramos e notificamos a ANVISA.</p></article>' +
+            '<p class="cartao-loja__linha">' + L.icone('escudo', 15) + ' Reação adversa</p>' +
+            '<p>Se você teve uma reação inesperada a um medicamento, avise a equipe. ' +
+            'O caso é registrado e notificado à ANVISA.</p></article>' +
         '</div>' +
         '<h2>Prefere que a gente ligue?</h2>' +
         '<form class="form-avaliacao" style="max-width:520px" data-contato>' +
@@ -166,25 +245,28 @@
 
     'entregas': {
       titulo: 'Prazos e entregas',
-      resumo: 'Como, quando e por quanto entregamos.',
+      resumo: 'Do Disk Entrega no WhatsApp ao pedido fechado sozinho pelo site.',
       corpo:
         '<h2>Modalidades</h2>' +
         '<table class="tabela-specs"><tbody>' +
-          '<tr><th scope="row">Entrega expressa</th><td>Em até 2 horas, nas capitais e regiões metropolitanas ' +
-            'com cobertura. Pedidos feitos após as 20h saem no dia seguinte.</td></tr>' +
+          '<tr><th scope="row">Entrega expressa</th><td>Em até 2 horas nas cidades onde a rede ' +
+            'tem loja. Pedidos após as 20h saem no dia seguinte, exceto pelas unidades 24h.</td></tr>' +
           '<tr><th scope="row">Entrega padrão</th><td>De 2 a 9 dias úteis conforme a região. ' +
-            'Grátis em pedidos acima de ' + L.moeda(CFG.freteGratisAcima) + '.</td></tr>' +
-          '<tr><th scope="row">Retirada em loja</th><td>Sempre gratuita. Pronto em até 4 horas ' +
-            'em qualquer uma das nossas unidades.</td></tr>' +
+            'Grátis acima de ' + L.moeda(CFG.freteGratisAcima) + '.</td></tr>' +
+          '<tr><th scope="row">Retirada em loja</th><td>Sempre gratuita, em qualquer uma das ' +
+            CFG.totalLojas + ' unidades. Pronto em até 4 horas.</td></tr>' +
+          '<tr><th scope="row">Disk Entrega</th><td>Pelo WhatsApp ' + CFG.whatsapp +
+            ', exclusivo para Ribeirão Preto.</td></tr>' +
         '</tbody></table>' +
         '<h2>Acompanhamento</h2>' +
-        '<p>Assim que o pedido é despachado, enviamos o código de rastreio por e-mail. ' +
+        '<p>Assim que o pedido é despachado, o código de rastreio vai por e-mail. ' +
         'Você também acompanha tudo em <a href="conta.html">Meus pedidos</a>.</p>' +
         '<h2>Cuidados no transporte</h2>' +
         '<p>Medicamentos termossensíveis viajam em embalagem térmica com controle de temperatura. ' +
-        'Produtos de uso contínuo são separados em sacola lacrada e identificada.</p>' +
-        '<div class="aviso-legal"><strong>Importante</strong>A entrega é feita ao morador do endereço ' +
-        'informado, mediante conferência. Não deixamos medicamentos com porteiro sem autorização prévia.</div>'
+        'Itens de uso contínuo vão em sacola lacrada e identificada.</p>' +
+        '<div class="aviso-legal"><strong>Importante</strong>A entrega é feita ao morador do ' +
+        'endereço informado, mediante conferência. Medicamentos não são deixados com porteiro ' +
+        'sem autorização prévia.</div>'
     },
 
     'trocas': {
@@ -311,7 +393,7 @@
           '<div><label for="lg-msg">Detalhes do pedido</label><textarea id="lg-msg"></textarea></div>' +
           '<button class="btn btn--principal" type="submit" style="justify-self:start">Enviar solicitação</button>' +
         '</form>' +
-        '<p class="miudos">Encarregado de dados (DPO): privacidade@bemviver.exemplo</p>'
+        '<p class="miudos">Encarregado de dados (DPO): privacidade@drogariasaocarlos.com.br</p>'
     }
   };
 
@@ -332,7 +414,8 @@
         '<li aria-current="page">' + L.escapar(pagina.titulo) + '</li></ol></div></nav>';
 
     var atalhos = [
-      ['quem-somos', 'Quem somos'], ['lojas', 'Nossas lojas'], ['clube', 'Clube Bem Viver'],
+      ['quem-somos', 'Quem somos'], ['lojas', 'Nossas lojas'], ['servicos', 'Serviços'],
+      ['farmacia-popular', 'Farmácia Popular'], ['clube', 'Clube São Carlos'],
       ['atendimento', 'Atendimento'], ['entregas', 'Entregas'], ['trocas', 'Trocas'],
       ['faq', 'Dúvidas'], ['privacidade', 'Privacidade'], ['termos', 'Termos'],
       ['cookies', 'Cookies'], ['lgpd', 'LGPD']
@@ -361,6 +444,18 @@
       botao.setAttribute('aria-expanded', aberto ? 'false' : 'true');
       var corpo = documento.getElementById(botao.getAttribute('aria-controls'));
       if (corpo) corpo.hidden = aberto;
+    });
+
+    documento.addEventListener('click', function (e) {
+      var chip = e.target.closest('[data-cidade]');
+      if (!chip) return;
+      var cidade = chip.getAttribute('data-cidade');
+      documento.querySelectorAll('[data-cidade]').forEach(function (b) {
+        b.setAttribute('aria-pressed', b === chip ? 'true' : 'false');
+      });
+      documento.querySelectorAll('[data-cidade-loja]').forEach(function (card) {
+        card.hidden = cidade !== '' && card.getAttribute('data-cidade-loja') !== cidade;
+      });
     });
 
     documento.addEventListener('submit', function (e) {

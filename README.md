@@ -1,4 +1,4 @@
-# Drogaria Bem Viver — loja de farmácia online
+# Drogaria São Carlos — loja de farmácia online
 
 Site de e-commerce farmacêutico completo, em HTML, CSS e JavaScript puros —
 sem build, sem dependências, sem back-end. Basta abrir `index.html`.
@@ -9,7 +9,7 @@ de uma loja farmacêutica brasileira (PDP com galeria, preço/PIX/parcelamento,
 cálculo de frete por CEP, abas de composição e bula, avaliações, carrinho),
 com marca, textos, ilustrações e dados **totalmente originais**.
 
-> **Loja fictícia.** Drogaria Bem Viver, as marcas de produto (Lumiara, Nuvela,
+> **Loja fictícia.** Drogaria São Carlos, as marcas de produto (Lumiara, Nuvela,
 > Solaris, Vitalis, Orallis, Soft Care), os registros sanitários, preços e
 > avaliações foram inventados para esta demonstração. Nenhuma venda é
 > processada e nenhum pagamento é cobrado.
@@ -115,7 +115,7 @@ do boleto) tratado. O pedido já nasce com um campo `status` correspondente.
 ## Estado salvo no navegador
 
 Carrinho, favoritos, CEP, produtos vistos, avaliações escritas, sessão do
-cliente, pedidos e endereços ficam em `localStorage` (prefixo `bv:`). Toda
+cliente, pedidos e endereços ficam em `localStorage` (prefixo `dsc:`). Toda
 leitura é protegida por `try/catch`, então o site funciona normalmente em
 janela anônima.
 

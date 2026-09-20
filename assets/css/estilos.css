@@ -4,28 +4,35 @@
 
 /* ------------------------------------------------------------ tokens */
 :root {
-  --marca-900: #0b3f38;
-  --marca-800: #0d5c52;
-  --marca-700: #0f766e;
-  --marca-600: #13938a;
-  --marca-100: #d6ece8;
-  --marca-50:  #eef7f5;
+  /* ---------------------------------------------------------------------
+     Identidade da rede. Trocar este bloco reveste o site inteiro: todos os
+     componentes referenciam estas variáveis, nenhuma cor é escrita solta.
+     --marca-*  azul institucional   --oferta-*  vermelho de ofertas
+     --------------------------------------------------------------------- */
+  /* azul #23397e e vermelho #ed1c24 são as cores da logomarca; as demais
+     variações foram derivadas delas para dar contraste de texto e estado */
+  --marca-900: #131f45;
+  --marca-800: #1a2b60;
+  --marca-700: #23397e;
+  --marca-600: #2f4ba3;
+  --marca-100: #d4daed;
+  --marca-50:  #eef1f8;
 
-  --oferta-700: #9a3412;
-  --oferta-600: #c2410c;
-  --oferta-500: #ea580c;
-  --oferta-50:  #fff2e8;
+  --oferta-700: #9c1116;
+  --oferta-600: #c8161d;
+  --oferta-500: #ed1c24;
+  --oferta-50:  #fdecec;
 
-  --clube-700: #6d28d9;
-  --clube-50:  #f4eefe;
+  --clube-700: #0f766e;
+  --clube-50:  #e7f5f2;
 
-  --tinta-900: #10211e;
-  --tinta-700: #3d4f4b;
-  --tinta-500: #6b7d79;
-  --tinta-300: #9eaeab;
+  --tinta-900: #111a2e;
+  --tinta-700: #414c63;
+  --tinta-500: #6d788f;
+  --tinta-300: #9ea7b9;
 
-  --linha: #e2eae8;
-  --fundo: #f4f7f6;
+  --linha: #e3e8f0;
+  --fundo: #f4f6fa;
   --papel: #ffffff;
 
   --ok-600: #15803d;
@@ -43,9 +50,9 @@
   --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
   --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
 
-  --sombra-1: 0 1px 2px rgba(11, 63, 56, .06), 0 1px 3px rgba(11, 63, 56, .08);
-  --sombra-2: 0 4px 12px rgba(11, 63, 56, .08), 0 2px 4px rgba(11, 63, 56, .05);
-  --sombra-3: 0 12px 32px rgba(11, 63, 56, .14);
+  --sombra-1: 0 1px 2px rgba(19, 31, 69, .06), 0 1px 3px rgba(19, 31, 69, .08);
+  --sombra-2: 0 4px 12px rgba(19, 31, 69, .08), 0 2px 4px rgba(19, 31, 69, .05);
+  --sombra-3: 0 12px 32px rgba(19, 31, 69, .14);
 
   --largura: 1240px;
   --fonte: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -154,7 +161,9 @@ ul { margin: 0; padding-left: 1.15rem; }
   align-items: center; gap: var(--s5); padding: var(--s4) 0;
   transition: padding .2s ease;
 }
-.cabecalho__logo img { height: 46px; width: auto; transition: height .2s ease; }
+/* a altura manda; a largura sai do viewBox do próprio SVG, então qualquer
+   proporção de logomarca encaixa sem distorcer */
+.cabecalho__logo img { height: 46px; width: auto; max-width: 280px; transition: height .2s ease; }
 
 /* Estado compacto: ao rolar para baixo o cabeçalho encolhe e esconde a régua de
    categorias, devolvendo altura à página. Rolar para cima restaura tudo. */
@@ -581,10 +590,11 @@ ul { margin: 0; padding-left: 1.15rem; }
 /* barra fixa de compra */
 .barra-fixa {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
-  background: var(--papel); border-top: 1px solid var(--linha); box-shadow: 0 -4px 16px rgba(11,63,56,.10);
+  background: var(--papel); border-top: 1px solid var(--linha); box-shadow: 0 -4px 16px rgba(19,31,69,.10);
   padding: var(--s3) 0; transform: translateY(110%); transition: transform .25s;
 }
 .barra-fixa.visivel { transform: translateY(0); }
+.barra-fixa.visivel ~ .zap-flutuante, body:has(.barra-fixa.visivel) .zap-flutuante { bottom: 92px; }
 .barra-fixa__interno { display: flex; align-items: center; gap: var(--s4); }
 .barra-fixa img { width: 48px; height: 48px; object-fit: contain; }
 .barra-fixa__nome { font-size: 13.5px; font-weight: 600; flex: 1; min-width: 0;
@@ -839,9 +849,35 @@ ul { margin: 0; padding-left: 1.15rem; }
 .pedido__detalhe { border-top: 1px solid var(--linha); margin-top: var(--s3); padding-top: var(--s3); }
 .pedido__detalhe .tabela-specs th { background: none; width: 62%; font-weight: 500; color: var(--tinta-700); }
 
+/* ------------------------------------------------------------ rede São Carlos */
+.filtro-cidades { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s4); }
+.filtro-cidades button[aria-pressed="true"] { background: var(--marca-700); color: #fff; border-color: var(--marca-700); }
+
+.servico-icone {
+  width: 42px; height: 42px; border-radius: 50%; background: var(--marca-50);
+  color: var(--marca-700); display: grid; place-items: center; margin-bottom: var(--s2);
+}
+.pendente {
+  color: var(--tinta-300); font-style: italic;
+  border-bottom: 1px dashed var(--tinta-300);
+}
+.cartao-loja.destaque-zap { border-color: var(--ok-600); background: var(--ok-50); }
+
+/* botão flutuante de WhatsApp */
+.zap-flutuante {
+  position: fixed; right: var(--s4); bottom: var(--s4); z-index: 50;
+  width: 56px; height: 56px; border-radius: 50%; background: #1faa53; color: #fff;
+  display: grid; place-items: center; box-shadow: var(--sombra-3);
+  transition: transform .15s, background .15s;
+}
+.zap-flutuante:hover { background: #179245; transform: scale(1.06); text-decoration: none; }
+.zap-flutuante:active { transform: scale(.97); }
+
+.barra-aviso a { color: #fff; text-decoration: underline; font-weight: 700; }
+
 /* ------------------------------------------------------------ gaveta do carrinho */
 .cortina {
-  position: fixed; inset: 0; background: rgba(11, 33, 30, .45); z-index: 90;
+  position: fixed; inset: 0; background: rgba(11, 20, 40, .48); z-index: 90;
   opacity: 0; pointer-events: none; transition: opacity .22s;
 }
 .cortina.aberta { opacity: 1; pointer-events: auto; }
@@ -915,7 +951,12 @@ ul { margin: 0; padding-left: 1.15rem; }
 .rodape__colunas { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: var(--s5); padding: var(--s6) 0; }
 .rodape__colunas h3 { color: #fff; font-size: 13.5px; margin-bottom: var(--s3); letter-spacing: .03em; }
 .rodape__colunas ul { list-style: none; padding: 0; display: grid; gap: 9px; }
-.rodape__sobre img { height: 44px; margin-bottom: var(--s3); }
+.rodape__sobre img { height: 44px; width: auto; max-width: 220px; display: block; }
+/* a logomarca colorida precisa de fundo claro para respirar sobre o azul */
+.marca-chip {
+  display: inline-block; background: #fff; border-radius: var(--r-md);
+  padding: 10px 14px; margin-bottom: var(--s3);
+}
 .rodape__sobre p { font-size: 13px; line-height: 1.6; }
 .redes { display: flex; gap: var(--s2); margin-top: var(--s3); }
 .redes a {

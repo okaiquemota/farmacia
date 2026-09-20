@@ -249,7 +249,7 @@
       sku: 'MED-DIP-500',
       slug: 'dipirona-monoidratada-500mg-20-comprimidos',
       nome: 'Dipirona Monoidratada 500mg 20 Comprimidos — Genérico',
-      marca: 'Genérico Bem Viver', linha: 'Genéricos', categoria: 'medicamentos',
+      marca: 'Genérico São Carlos', linha: 'Genéricos', categoria: 'medicamentos',
       subcategoria: 'Analgésicos e antitérmicos',
       preco: 12.49, precoDe: 18.9, precoClube: 10.62,
       imagem: 'med-dipirona.svg', galeria: ['med-dipirona.svg'],
@@ -283,7 +283,7 @@
       sku: 'MED-IBU-400',
       slug: 'ibuprofeno-400mg-20-comprimidos',
       nome: 'Ibuprofeno 400mg 20 Comprimidos Revestidos — Genérico',
-      marca: 'Genérico Bem Viver', linha: 'Genéricos', categoria: 'medicamentos',
+      marca: 'Genérico São Carlos', linha: 'Genéricos', categoria: 'medicamentos',
       subcategoria: 'Anti-inflamatórios',
       preco: 18.9, precoDe: 26.5, precoClube: 16.07,
       imagem: 'med-ibuprofeno.svg', galeria: ['med-ibuprofeno.svg'],
@@ -465,22 +465,25 @@
   /* --------------------------------------------------------------------- */
   var BANNERS = [
     {
-      imagem: 'banner-1.svg', etiqueta: 'Clube Bem Viver',
-      titulo: 'Até 15% de desconto em toda a loja, todos os dias',
-      texto: 'Assine grátis e acumule pontos que viram desconto na próxima compra.',
-      cta: 'Conhecer o Clube', href: '#clube'
+      imagem: 'banner-1.svg', etiqueta: 'Desde 1973',
+      titulo: 'Agora a sua drogaria de sempre também é online',
+      texto: '17 lojas em Ribeirão Preto, Matão, Pirassununga e Jardinópolis — e o mesmo ' +
+             'atendimento, agora a qualquer hora.',
+      cta: 'Ver as lojas', href: 'institucional.html?p=lojas'
     },
     {
-      imagem: 'banner-2.svg', etiqueta: 'Semana da beleza',
-      titulo: 'Cabelos e dermocosméticos com até 30% OFF',
-      texto: 'Seleção de tratamentos capilares e cuidados com a pele com preços especiais.',
-      cta: 'Ver ofertas', href: 'categoria.html?cat=dermo'
+      imagem: 'banner-2.svg', etiqueta: 'Ofertas',
+      titulo: 'Genéricos e dermocosméticos com até 30% OFF',
+      texto: 'Mais de 3.000 medicamentos de marca e genéricos, com preço de clube à vista ' +
+             'em todas as páginas.',
+      cta: 'Ver ofertas', href: 'categoria.html?cat=ofertas'
     },
     {
-      imagem: 'banner-3.svg', etiqueta: 'Entrega rápida',
-      titulo: 'Receba em até 2 horas na sua casa',
-      texto: 'Disponível para capitais e regiões metropolitanas. Consulte pelo CEP.',
-      cta: 'Ver produtos', href: 'categoria.html'
+      imagem: 'banner-3.svg', etiqueta: 'Disk Entrega',
+      titulo: 'Peça pelo site ou pelo WhatsApp e receba em casa',
+      texto: 'Entrega em até 2 horas nas cidades da rede, ou retirada gratuita em qualquer ' +
+             'uma das 17 lojas.',
+      cta: 'Comprar agora', href: 'categoria.html'
     }
   ];
 
@@ -501,22 +504,90 @@
     { faixa: [90000000, 99999999], uf: 'RS', nome: 'Rio Grande do Sul', base: 23.9, prazo: 5, expresso: false }
   ];
 
+  /* -----------------------------------------------------------------------
+     Dados da rede.
+
+     Os campos marcados como A CONFIRMAR são espaços reservados: não temos a
+     informação oficial e ela não pode ser inventada num material que leva o
+     nome da rede. Substituir antes de qualquer publicação.
+     ----------------------------------------------------------------------- */
   var CONFIG = {
-    nomeLoja: 'Drogaria Bem Viver',
+    nomeLoja: 'Drogaria São Carlos',
+    fundacao: 1973,
+    fundador: 'Ildefonso Henrique Knup',
+    totalLojas: 17,
+    cidades: ['Ribeirão Preto', 'Matão', 'Pirassununga', 'Jardinópolis'],
+
     freteGratisAcima: 99,
     descontoPix: 0.05,
     parcelasMax: 6,
     parcelaMinima: 20,
     descontoClube: 0.15,
+
     cupons: {
-      BEMVIVER10: { tipo: 'percentual', valor: 0.10, descricao: '10% de desconto' },
+      SAOCARLOS10: { tipo: 'percentual', valor: 0.10, descricao: '10% de desconto' },
       PRIMEIRA20: { tipo: 'percentual', valor: 0.20, descricao: '20% na primeira compra', minimo: 120 },
       FRETEGRATIS: { tipo: 'frete', valor: 1, descricao: 'frete grátis' }
     },
-    farmaceutico: 'Dra. Helena Marques Prado — CRF-SP 00.000',
-    cnpj: '00.000.000/0001-00',
-    telefone: '0800 000 0000'
+
+    /* Disk Entrega divulgado pela rede, exclusivo de Ribeirão Preto */
+    whatsapp: '(16) 4042-0778',
+    whatsappLink: 'https://wa.me/551640420778',
+
+    farmaceutico: 'Farmacêutico(a) responsável A CONFIRMAR — CRF-SP a confirmar',
+    cnpj: 'A CONFIRMAR',
+    telefone: '(16) 4042-0778'
   };
+
+  /* Unidades citadas publicamente pela rede. Endereço e telefone de cada uma
+     ficam em branco de propósito — entram com a lista oficial das 17 lojas. */
+  var LOJAS = [
+    { nome: 'Parque Ribeirão Preto', numero: 'Loja 02', cidade: 'Ribeirão Preto', uf: 'SP' },
+    { nome: 'Garibaldi', numero: 'Loja 04', cidade: 'Ribeirão Preto', uf: 'SP' },
+    { nome: 'Jardim Paulista', numero: 'Loja 09', cidade: 'Ribeirão Preto', uf: 'SP' },
+    { nome: 'Planalto Verde', numero: 'Loja 16', cidade: 'Ribeirão Preto', uf: 'SP' },
+    { nome: 'Ribeirão Verde', numero: '', cidade: 'Ribeirão Preto', uf: 'SP' },
+    { nome: 'Jardim Cristo Redentor', numero: 'Nova 02', cidade: 'Ribeirão Preto', uf: 'SP' }
+  ];
+
+  /* Serviços farmacêuticos que a rede divulga prestar nas lojas */
+  var SERVICOS = [
+    {
+      id: 'farmacia-popular', icone: 'escudo', titulo: 'Farmácia Popular',
+      resumo: 'Medicamentos gratuitos ou com desconto pelo programa do Ministério da Saúde.',
+      texto: 'O programa Farmácia Popular oferece medicamentos gratuitos para hipertensão, ' +
+             'diabetes e asma, e com desconto para outras condições como dislipidemia, ' +
+             'osteoporose, rinite, glaucoma, doença de Parkinson e anticoncepcionais. ' +
+             'Basta apresentar documento com foto, CPF e a receita médica dentro da validade.'
+    },
+    {
+      id: 'injetaveis', icone: 'escudo', titulo: 'Aplicação de injetáveis',
+      resumo: 'Aplicação feita por profissional habilitado, em sala apropriada.',
+      texto: 'A aplicação é feita por profissional habilitado, mediante apresentação da ' +
+             'receita médica e do medicamento. Consulte a unidade mais próxima para ' +
+             'confirmar horários de atendimento.'
+    },
+    {
+      id: 'afericao', icone: 'relogio', titulo: 'Aferição de pressão e glicemia',
+      resumo: 'Acompanhamento de rotina com equipe treinada.',
+      texto: 'Verificação de pressão arterial e de glicemia capilar com equipe treinada. ' +
+             'O serviço é de acompanhamento e não substitui consulta médica nem exame ' +
+             'laboratorial.'
+    },
+    {
+      id: 'plantao', icone: 'relogio', titulo: 'Atendimento 24 horas',
+      resumo: 'Unidades de plantão para quando a necessidade não espera.',
+      texto: 'A rede mantém atendimento 24 horas em unidades selecionadas. ' +
+             'Confira na página de lojas quais unidades operam em regime de plantão.'
+    },
+    {
+      id: 'entrega', icone: 'caminhao', titulo: 'Disk Entrega',
+      resumo: 'Pedidos por WhatsApp com entrega em Ribeirão Preto.',
+      texto: 'Peça pelo WhatsApp e receba em casa. O número de Disk Entrega é exclusivo ' +
+             'para Ribeirão Preto. Com a loja online, esse mesmo pedido passa a poder ser ' +
+             'fechado sozinho pelo cliente, a qualquer hora, sem ocupar um atendente.'
+    }
+  ];
 
   janela.LojaDados = {
     categorias: CATEGORIAS,
@@ -524,6 +595,8 @@
     banners: BANNERS,
     regioes: REGIOES,
     config: CONFIG,
+    lojas: LOJAS,
+    servicos: SERVICOS,
     porSku: function (sku) {
       for (var i = 0; i < PRODUTOS.length; i++) {
         if (PRODUTOS[i].sku === sku) return PRODUTOS[i];
