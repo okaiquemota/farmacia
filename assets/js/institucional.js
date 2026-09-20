@@ -63,14 +63,11 @@
           '<div class="numero"><b>' + CFG.cidades.length + '</b><span>cidades atendidas</span></div>' +
         '</div>' +
         '<h2>O que oferecemos além do balcão</h2>' +
-        '<ul>' +
-        '<li><strong>Serviços farmacêuticos</strong> nas lojas: aferição de pressão e glicemia e ' +
-          'aplicação de injetáveis com profissional habilitado.</li>' +
-        '<li><strong>Farmácia Popular</strong>, com medicamentos gratuitos ou subsidiados pelo ' +
-          'programa do Ministério da Saúde.</li>' +
-        '<li><strong>Atendimento 24 horas</strong> em unidades selecionadas.</li>' +
-        '<li><strong>Disk Entrega</strong> pelo WhatsApp ' + CFG.whatsapp + ', para Ribeirão Preto.</li>' +
-        '</ul>' +
+        '<ul>' + D.servicos.map(function (s) {
+          return '<li><strong>' + L.escapar(s.titulo) + '</strong> — ' +
+            L.escapar(s.resumo).replace(/\.$/, '') + '.</li>';
+        }).join('') + '</ul>' +
+        '<p><a href="institucional.html?p=servicos">Ver os serviços em detalhe</a></p>' +
         '<p><a class="btn btn--principal" href="institucional.html?p=lojas">Ver as lojas</a></p>'
     },
 

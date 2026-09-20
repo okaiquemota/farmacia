@@ -564,42 +564,71 @@
     { nome: 'Jardim Oliveira', numero: 'Loja 13', cidade: 'Jardinópolis', uf: 'SP', endereco: 'Av. Belarmino Pereira de Oliveira, 483', horario: 'Diariamente das 7h às 23h', telefone: '' }
   ];
 
-  /* Serviços farmacêuticos que a rede divulga prestar nas lojas */
+  /* Os nove serviços que a rede presta nas lojas. Descrições escritas para
+     este protótipo a partir do que cada serviço é. */
   var SERVICOS = [
     {
       id: 'farmacia-popular', icone: 'escudo', titulo: 'Farmácia Popular',
       resumo: 'Medicamentos gratuitos ou com desconto pelo programa do Ministério da Saúde.',
-      texto: 'O programa Farmácia Popular oferece medicamentos gratuitos para hipertensão, ' +
-             'diabetes e asma, e com desconto para outras condições como dislipidemia, ' +
-             'osteoporose, rinite, glaucoma, doença de Parkinson e anticoncepcionais. ' +
-             'Basta apresentar documento com foto, CPF e a receita médica dentro da validade.'
+      texto: 'A rede é credenciada ao programa e trabalha com os principais laboratórios nele ' +
+             'incluídos. São gratuitos os medicamentos para hipertensão, diabetes e asma, e têm ' +
+             'desconto os de dislipidemia, osteoporose, rinite, glaucoma, doença de Parkinson e ' +
+             'anticoncepcionais. Leve documento com foto, CPF e a receita dentro da validade.'
     },
     {
-      id: 'injetaveis', icone: 'escudo', titulo: 'Aplicação de injetáveis',
-      resumo: 'Aplicação feita por profissional habilitado, em sala apropriada.',
-      texto: 'A aplicação é feita por profissional habilitado, mediante apresentação da ' +
-             'receita médica e do medicamento. Consulte a unidade mais próxima para ' +
-             'confirmar horários de atendimento.'
+      id: 'injecoes', icone: 'escudo', titulo: 'Injeções',
+      resumo: 'Aplicação de injetáveis em sala apropriada, por profissional qualificado.',
+      texto: 'As lojas têm local reservado e equipe habilitada para aplicar medicamentos ' +
+             'injetáveis. Traga a receita e o medicamento. Consulte a unidade mais próxima ' +
+             'para confirmar os horários em que o serviço está disponível.'
     },
     {
-      id: 'afericao', icone: 'relogio', titulo: 'Aferição de pressão e glicemia',
-      resumo: 'Acompanhamento de rotina com equipe treinada.',
-      texto: 'Verificação de pressão arterial e de glicemia capilar com equipe treinada. ' +
-             'O serviço é de acompanhamento e não substitui consulta médica nem exame ' +
+      id: 'afericoes', icone: 'relogio', titulo: 'Aferições',
+      resumo: 'Medição de pressão arterial e de glicose com equipe especializada.',
+      texto: 'Acompanhamento de rotina para quem controla pressão ou diabetes, feito por equipe ' +
+             'treinada. É um serviço de acompanhamento: não substitui consulta médica nem exame ' +
              'laboratorial.'
     },
     {
+      id: 'pbm', icone: 'medicamentos', titulo: 'PBM',
+      resumo: 'Mais de 3.000 medicamentos de marca e genéricos com desconto de laboratório.',
+      texto: 'Os Programas de Benefício em Medicamentos aplicam o desconto do próprio ' +
+             'laboratório direto no balcão, mediante cadastro e apresentação da receita. ' +
+             'A rede trabalha com mais de 3.000 medicamentos de marca e genéricos para os ' +
+             'mais variados tratamentos.'
+    },
+    {
+      id: 'convenios', icone: 'cartao', titulo: 'Convênios',
+      resumo: 'Descontos por convênio particular ou empresarial.',
+      texto: 'Empresas e entidades conveniadas garantem desconto a funcionários e associados, ' +
+             'com compra identificada e desconto em folha quando o convênio prevê. ' +
+             'Consulte se o seu convênio já é atendido pela rede.'
+    },
+    {
       id: 'plantao', icone: 'relogio', titulo: 'Atendimento 24 horas',
-      resumo: 'Unidades de plantão para quando a necessidade não espera.',
-      texto: 'A rede mantém atendimento 24 horas em unidades selecionadas. ' +
-             'Confira na página de lojas quais unidades operam em regime de plantão.'
+      resumo: 'Duas unidades de plantão, para quando a necessidade não espera.',
+      texto: 'Planalto Verde, em Ribeirão Preto, e a unidade 24 Horas, em Pirassununga, ' +
+             'atendem em regime de plantão, todos os dias. As demais lojas funcionam ' +
+             'diariamente das 7h às 23h.'
     },
     {
       id: 'entrega', icone: 'caminhao', titulo: 'Disk Entrega',
-      resumo: 'Pedidos por WhatsApp com entrega em Ribeirão Preto.',
-      texto: 'Peça pelo WhatsApp e receba em casa. O número de Disk Entrega é exclusivo ' +
-             'para Ribeirão Preto. Com a loja online, esse mesmo pedido passa a poder ser ' +
-             'fechado sozinho pelo cliente, a qualquer hora, sem ocupar um atendente.'
+      resumo: 'Medicamentos e perfumaria entregues em casa, pedidos pelo WhatsApp.',
+      texto: 'Hoje o pedido é feito por telefone ou WhatsApp e passa por um atendente. ' +
+             'Com a loja online, o mesmo pedido pode ser fechado pelo próprio cliente, a ' +
+             'qualquer hora, com o frete calculado pelo CEP e sem ocupar ninguém no balcão.'
+    },
+    {
+      id: 'recarga', icone: 'celular', titulo: 'Recarga de celular',
+      resumo: 'Recarga das principais operadoras, na hora.',
+      texto: 'Recarga de crédito pré-pago das principais operadoras de telefonia móvel, ' +
+             'feita no caixa em poucos segundos.'
+    },
+    {
+      id: 'estacionamento', icone: 'carro', titulo: 'Estacionamento próprio',
+      resumo: 'Todas as lojas da rede têm estacionamento para clientes.',
+      texto: 'Todas as unidades contam com estacionamento próprio, o que facilita a compra ' +
+             'de volume e a retirada de pedidos feitos pelo site.'
     }
   ];
 

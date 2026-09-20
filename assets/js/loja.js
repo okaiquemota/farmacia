@@ -31,6 +31,8 @@
     chat: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/>',
     pix: '<path d="m12 3 4 4-4 4-4-4 4-4Z"/><path d="m12 13 4 4-4 4-4-4 4-4Z"/><path d="m3 12 4-4 4 4-4 4-4-4Z"/><path d="m13 12 4-4 4 4-4 4-4-4Z"/>',
     menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
+    celular: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
+    carro: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4"/><path d="M3 17h18v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2M7 20v-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/>',
     zap: '<path d="M21 11.6a8.5 8.5 0 0 1-12.6 7.5L3 21l1.9-5.3A8.5 8.5 0 1 1 21 11.6Z"/>' +
          '<path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l-.9 1.3a1.3 1.3 0 0 1-1.5.4 9.4 9.4 0 0 1-5.3-5.3 1.3 1.3 0 0 1 .4-1.5z" fill="currentColor" stroke="none"/>',
     camera: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
