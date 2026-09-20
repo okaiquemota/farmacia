@@ -24,7 +24,9 @@
       return;
     }
 
-    var disponiveis = lista.filter(function (p) { return p.estoque > 0; });
+    /* itens com receita não entram no carrinho: contá-los aqui faria o botão
+       prometer mais do que consegue adicionar */
+    var disponiveis = lista.filter(function (p) { return p.estoque > 0 && !p.receita; });
 
     alvo.innerHTML =
       '<div class="barra-listagem">' +
@@ -60,7 +62,9 @@
       if (e.target.closest('[data-favorito]')) { janela.setTimeout(desenhar, 0); return; }
 
       if (e.target.closest('[data-add-todos]')) {
-        favoritos().forEach(function (p) { if (p.estoque > 0) L.adicionar(p.sku, 1); });
+        favoritos().forEach(function (p) {
+          if (p.estoque > 0 && !p.receita) L.adicionar(p.sku, 1);
+        });
       }
     });
   }

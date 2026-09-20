@@ -104,8 +104,11 @@
 
   /* ------------------------------------------------------------ ofertas */
   function ofertas() {
+    /* vitrine de impulso: fora dela o que não se compra pelo site.
+       Medicamento com receita aparece nas categorias e na busca, onde o
+       caminho é reservar e retirar na loja. */
     var lista = D.produtos
-      .filter(function (p) { return L.desconto(p) >= 20 && p.estoque > 0; })
+      .filter(function (p) { return L.desconto(p) >= 20 && p.estoque > 0 && !p.receita; })
       .sort(function (a, b) { return L.desconto(b) - L.desconto(a); })
       .slice(0, 8);
 

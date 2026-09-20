@@ -196,6 +196,10 @@
   function adicionar(sku, qtd, variacao) {
     var produto = D.porSku(sku);
     if (!produto) return;
+    if (produto.receita) {
+      aviso('Este medicamento exige receita e é retirado na loja.', 'erro');
+      return;
+    }
     if (produto.estoque <= 0) { aviso('Produto indisponível no momento.', 'erro'); return; }
 
     var q = Math.max(1, qtd || 1);
@@ -317,6 +321,11 @@
     if (fora) selos += '<span class="selo selo--esgotado">Indisponível</span>';
     else if (off > 0) selos += '<span class="selo selo--oferta">-' + off + '%</span>';
     if (p.generico) selos += '<span class="selo selo--generico">Genérico</span>';
+    if (p.receita) selos += '<span class="selo selo--receita">Sob prescrição</span>';
+    if (p.farmaciaPopular) {
+      selos += '<span class="selo selo--popular">Farmácia Popular' +
+        (p.farmaciaPopular === 'gratuito' ? ' · grátis' : '') + '</span>';
+    }
     (p.tags || []).forEach(function (t) { selos += '<span class="selo selo--novo">' + escapar(t) + '</span>'; });
 
     var href = 'produto.html?sku=' + encodeURIComponent(p.sku);
@@ -338,14 +347,22 @@
         '<div class="cartao__precos">' +
           (off > 0 ? '<span class="preco-antigo">' + moeda(p.precoDe) + '</span>' : '') +
           '<span class="preco-atual">' + moeda(p.preco) + '</span>' +
-          '<span class="preco-parcela">ou ' + parc.vezes + 'x de ' + moeda(parc.valor) + ' sem juros</span>' +
+          /* uma parcela não é parcelamento: abaixo da parcela mínima a linha some */
+          (parc.vezes > 1
+            ? '<span class="preco-parcela">ou ' + parc.vezes + 'x de ' + moeda(parc.valor) + ' sem juros</span>'
+            : '<span class="preco-parcela">à vista no cartão</span>') +
           (p.precoClube ? '<span class="preco-clube">' + icone('coracao', 12, true) +
             'Clube ' + moeda(p.precoClube) + '</span>' : '') +
         '</div>' +
-        (op.semBotao ? '' :
-          '<button class="btn ' + (fora ? 'btn--neutro' : 'btn--principal') + ' btn--bloco" type="button" ' +
-          'data-add="' + escapar(p.sku) + '"' + (fora ? ' disabled' : '') + '>' +
-          (fora ? 'Avise-me' : icone('sacola', 16) + ' Adicionar') + '</button>') +
+        (op.semBotao ? ''
+          : p.receita
+            /* pelo site não há venda de medicamento com receita: o caminho é
+               a reserva para retirada, com a receita apresentada na loja */
+            ? '<a class="btn btn--contorno btn--bloco" href="' + href + '">' +
+              icone('escudo', 16) + ' Reservar na loja</a>'
+            : '<button class="btn ' + (fora ? 'btn--neutro' : 'btn--principal') + ' btn--bloco" type="button" ' +
+              'data-add="' + escapar(p.sku) + '"' + (fora ? ' disabled' : '') + '>' +
+              (fora ? 'Avise-me' : icone('sacola', 16) + ' Adicionar') + '</button>') +
       '</article>';
   }
 

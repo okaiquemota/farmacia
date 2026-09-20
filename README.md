@@ -49,6 +49,23 @@ Sem parâmetros, `produto.html` abre o produto principal
 - **Barra fixa de compra** ao rolar, relacionados e vistos recentemente
 - **JSON-LD** `schema.org/Product` gerado para cada produto
 
+## Medicamentos
+
+O catálogo traz 26 itens. Os genéricos usam nome de substância, que é como
+genérico se identifica — paracetamol, omeprazol, loratadina, losartana.
+
+Dois estados que uma farmácia precisa e uma loja genérica não tem:
+
+- **Venda sob prescrição** (`receita: true`). O item aparece na busca e nas
+  categorias, mas não entra no carrinho: o botão vira *Reservar para retirada*,
+  e a PDP explica que a receita é apresentada ao farmacêutico na loja. O
+  bloqueio também vale no `Loja.adicionar`, para o caso de alguém chamar a
+  função direto. Esses itens ficam fora da vitrine "Ofertas do dia", que é de
+  compra por impulso.
+- **Farmácia Popular** (`farmaciaPopular: 'gratuito' | 'desconto'`). Marca os
+  medicamentos cobertos pelo programa, com selo no cartão e explicação na PDP
+  ligando para a página do programa.
+
 ## Navegação e checkout
 
 - **Cabeçalho retrátil.** Ao passar de 220px de rolagem ele encolhe de 127px
@@ -115,7 +132,7 @@ banco. Em `supabase/migrations/` estão o esquema e a carga inicial:
 | Arquivo | Conteúdo |
 |---|---|
 | `0001_schema.sql` | 9 tabelas no schema `farmacia`, índices, triggers e RLS |
-| `0002_carga_inicial.sql` | 7 categorias, 14 produtos, 17 lojas, 9 serviços, 3 cupons, 13 faixas de frete |
+| `0002_carga_inicial.sql` | 7 categorias, 26 produtos, 17 lojas, 9 serviços, 3 cupons, 13 faixas de frete |
 
 Decisões que valem saber:
 
@@ -168,7 +185,8 @@ alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
 
-O esquema é validado contra um Postgres real: as duas migrations são aplicadas
+São quatro suítes, somando 157 checagens. O esquema é validado contra um
+Postgres real: as duas migrations são aplicadas
 do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
 catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste
 de mapeamento pega as linhas reais do banco e confirma que o catálogo resultante

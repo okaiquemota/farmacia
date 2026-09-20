@@ -189,8 +189,9 @@
       '<div class="resumo__total"><span>Total</span><span>' + L.moeda(tot) + '</span></div>' +
       '<p class="compra__pix" style="margin:6px 0 0">' + L.icone('pix', 15) +
         L.moeda(L.precoPix(tot)) + ' à vista no PIX</p>' +
-      '<p class="compra__parcelas" style="margin:0 0 12px">ou ' + parc.vezes + 'x de ' +
-        L.moeda(parc.valor) + ' sem juros</p>' +
+      '<p class="compra__parcelas" style="margin:0 0 12px">' +
+        (parc.vezes > 1 ? 'ou ' + parc.vezes + 'x de ' + L.moeda(parc.valor) + ' sem juros'
+                        : 'ou à vista no cartão') + '</p>' +
 
       '<a class="btn btn--compra btn--bloco" href="checkout.html">' +
         L.icone('escudo', 17) + ' Finalizar compra</a>' +

@@ -147,6 +147,20 @@ ul { margin: 0; padding-left: 1.15rem; }
 .selo--generico { background: var(--ok-50); color: var(--ok-600); }
 .selo--novo { background: var(--marca-100); color: var(--marca-800); }
 .selo--esgotado { background: #eceeed; color: var(--tinta-500); }
+.selo--receita { background: var(--alerta-50); color: var(--alerta-600); }
+.selo--popular { background: var(--ok-50); color: var(--ok-600); }
+
+.caixa-receita {
+  border: 1px solid var(--alerta-600); background: var(--alerta-50);
+  border-radius: var(--r-sm); padding: var(--s3) var(--s4); display: grid; gap: 6px;
+}
+.caixa-receita b { display: flex; align-items: center; gap: 6px; font-size: 13.5px; color: #7c4a06; }
+.caixa-receita p { margin: 0; font-size: 13px; color: #7c4a06; }
+.caixa-receita .popular-nota {
+  display: flex; align-items: flex-start; gap: 6px; color: var(--ok-600);
+  border-top: 1px solid rgba(124, 74, 6, .18); padding-top: 6px; margin-top: 2px;
+}
+.caixa-receita .popular-nota svg { flex: none; margin-top: 2px; }
 
 /* ------------------------------------------------------------ cabeçalho */
 .barra-aviso {
