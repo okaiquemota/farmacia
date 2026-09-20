@@ -68,6 +68,18 @@ Dois estados que uma farmácia precisa e uma loja genérica não tem:
 
 ## Navegação e checkout
 
+- **Quem gruda é o `#cabecalho`, não o `.cabecalho` de dentro.** `position:
+  sticky` prende o elemento à caixa do **pai**. Com o sticky no filho, o pai
+  media só a própria altura, e passados esses ~160px de rolagem o cabeçalho ia
+  embora junto com ele. No `#cabecalho` o pai é o `<body>`, que acompanha a
+  página inteira. A barra de aviso fica fora dele, para subir e sumir.
+- **Blocos laterais precisam de invólucro que estica.** Filtros e resumo do
+  carrinho também não grudavam: o `div` em volta encolhia até o tamanho deles e
+  não sobrava curso. `align-self: stretch` no invólucro resolve. A caixa de
+  compra da PDP não tem sticky de propósito — é mais alta que a coluna vizinha,
+  então nunca haveria curso; quem assume ali é a `.barra-fixa`.
+- **Âncoras** usam `scroll-margin-top` com a altura corrente do cabeçalho, senão
+  o alvo pára atrás dele.
 - **Cabeçalho retrátil.** Descendo, ele encolhe de 127px para 61px e esconde a
   régua de categorias; subindo, volta inteiro na hora, sem precisar chegar ao
   topo. A decisão é por direção, mas não pode ser tomada a cada quadro:
@@ -187,7 +199,7 @@ alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
 
-São cinco suítes, somando 174 checagens. O esquema é validado contra um
+São sete suítes, somando 201 checagens. O esquema é validado contra um
 Postgres real: as duas migrations são aplicadas
 do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
 catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste

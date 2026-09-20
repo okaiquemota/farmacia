@@ -390,12 +390,20 @@
       return '<li><a href="institucional.html?p=' + i[0] + '">' + i[1] + '</a></li>';
     }).join('');
 
-    alvo.innerHTML = '' +
+    var aviso = '' +
       '<div class="barra-aviso">' +
         '<strong>Frete grátis</strong> acima de ' + moeda(CFG.freteGratisAcima) +
         ' · Disk Entrega <a href="' + CFG.whatsappLink + '" rel="noopener">' + CFG.whatsapp + '</a>' +
         ' · ' + CFG.totalLojas + ' lojas em ' + CFG.cidades.length + ' cidades' +
-      '</div>' +
+      '</div>';
+
+    /* a barra de aviso é irmã do #cabecalho, não filha: ela rola e some,
+       enquanto o #cabecalho fica grudado no topo */
+    if (!documento.querySelector('.barra-aviso')) {
+      alvo.insertAdjacentHTML('beforebegin', aviso);
+    }
+
+    alvo.innerHTML = '' +
       '<div class="cabecalho">' +
         '<div class="container cabecalho__topo">' +
           '<button class="menu-hamburguer" type="button" data-abrir-menu aria-label="Abrir menu de categorias">' +
