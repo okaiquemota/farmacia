@@ -36,6 +36,8 @@
       estoque: r.estoque,
       destaque: r.destaque,
       generico: r.generico,
+      receita: r.receita,
+      farmaciaPopular: r.farmacia_popular,
       tags: r.tags || [],
       resumo: r.resumo,
       beneficios: r.beneficios || [],

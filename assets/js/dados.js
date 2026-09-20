@@ -458,6 +458,387 @@
         ['Código de barras (EAN)', '7890000000145'], ['País de origem', 'Brasil']
       ],
       relacionados: ['DER-HID-400', 'HIG-CRE-90']
+    },
+
+    /* ---------------------------------------------- genéricos e MIPs
+       Genérico se identifica pela substância, não por marca. Posologias
+       aqui são as de bula para adulto, sempre com remissão ao médico. */
+    {
+      sku: 'MED-PAR-750',
+      slug: 'paracetamol-750mg-20-comprimidos',
+      nome: 'Paracetamol 750mg 20 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Analgésicos e antitérmicos',
+      preco: 9.9, precoDe: 14.9, precoClube: 8.42,
+      imagem: 'med-paracetamol.svg', galeria: ['med-paracetamol.svg'],
+      nota: 4.5, qtdAvaliacoes: 412, estoque: 140, destaque: false,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Analgésico e antitérmico para dor leve a moderada e febre. ' +
+              'Alternativa para quem não pode usar anti-inflamatório.',
+      beneficios: ['Não agride o estômago como os anti-inflamatórios',
+                   'Pode ser usado por gestantes sob orientação médica',
+                   'Cartela com 20 comprimidos'],
+      descricao: '<p>O paracetamol age no sistema nervoso central reduzindo a percepção da dor e ' +
+                 'a febre. Por não ser anti-inflamatório, costuma ser melhor tolerado pelo estômago ' +
+                 'que a dipirona e o ibuprofeno.</p>',
+      modoUso: '<p>Adultos: 1 comprimido a cada 6 a 8 horas, não ultrapassando 5 comprimidos em ' +
+               '24 horas. Não use por mais de 5 dias seguidos sem orientação médica.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> paracetamol 750 mg.<br>' +
+                    '<strong>Excipientes:</strong> amido, povidona, estearato de magnésio.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Paracetamol'], ['Concentração', '750 mg'],
+        ['Forma farmacêutica', 'Comprimido'], ['Quantidade', '20 comprimidos'],
+        ['Classe terapêutica', 'Analgésico / antitérmico'],
+        ['Tipo de medicamento', 'Genérico — isento de prescrição (MIP)'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'MEDICAMENTO ISENTO DE PRESCRIÇÃO. AO PERSISTIREM OS SINTOMAS, O MÉDICO DEVERÁ ' +
+                  'SER CONSULTADO. Doses acima da recomendada podem causar lesão no fígado. ' +
+                  'Não use junto a bebida alcoólica nem com outros produtos que contenham ' +
+                  'paracetamol. Leia a bula.',
+      relacionados: ['MED-DIP-500', 'MED-IBU-400', 'MED-DIP-GTS']
+    },
+    {
+      sku: 'MED-DIP-GTS',
+      slug: 'dipirona-gotas-500mg-ml-20ml',
+      nome: 'Dipirona Sódica Gotas 500mg/ml 20ml — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Analgésicos e antitérmicos',
+      preco: 8.9, precoDe: 12.9, precoClube: 7.57,
+      imagem: 'med-dipirona-gotas.svg', galeria: ['med-dipirona-gotas.svg'],
+      nota: 4.6, qtdAvaliacoes: 288, estoque: 96, destaque: false,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Dipirona em gotas, com dose ajustável pelo peso. Prática para crianças ' +
+              'e para quem tem dificuldade de engolir comprimido.',
+      beneficios: ['Dose ajustável ao peso', 'Frasco com conta-gotas', 'Ação rápida'],
+      descricao: '<p>Apresentação em gotas da dipirona sódica, indicada como analgésico e ' +
+                 'antitérmico. A forma líquida permite ajustar a dose ao peso, o que facilita ' +
+                 'o uso pediátrico sob orientação.</p>',
+      modoUso: '<p>Adultos: 20 a 40 gotas até 4 vezes ao dia. Para crianças, a dose depende do ' +
+               'peso e deve ser definida pelo médico ou farmacêutico. Não use em menores de ' +
+               '3 meses.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> dipirona sódica 500 mg/ml.<br>' +
+                    '<strong>Excipientes:</strong> água purificada, sacarina sódica.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Dipirona sódica'], ['Concentração', '500 mg/ml'],
+        ['Forma farmacêutica', 'Solução oral em gotas'], ['Conteúdo', '20 ml'],
+        ['Tipo de medicamento', 'Genérico — isento de prescrição (MIP)'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'MEDICAMENTO ISENTO DE PRESCRIÇÃO. AO PERSISTIREM OS SINTOMAS, O MÉDICO DEVERÁ ' +
+                  'SER CONSULTADO. Não use em caso de alergia à dipirona. Leia a bula.',
+      relacionados: ['MED-DIP-500', 'MED-PAR-750']
+    },
+    {
+      sku: 'MED-OME-20',
+      slug: 'omeprazol-20mg-28-capsulas',
+      nome: 'Omeprazol 20mg 28 Cápsulas — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Estômago e digestão',
+      preco: 16.9, precoDe: 24.9, precoClube: 14.37,
+      imagem: 'med-omeprazol.svg', galeria: ['med-omeprazol.svg'],
+      nota: 4.7, qtdAvaliacoes: 356, estoque: 78, destaque: true,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Reduz a produção de ácido no estômago. Indicado para azia frequente, ' +
+              'má digestão e refluxo.',
+      beneficios: ['Alívio da azia por até 24 horas', 'Cápsulas de liberação entérica',
+                   'Tratamento de 4 semanas'],
+      descricao: '<p>O omeprazol é um inibidor da bomba de prótons: age na célula que produz ' +
+                 'ácido no estômago, reduzindo a acidez por cerca de 24 horas. O efeito pleno ' +
+                 'costuma aparecer após alguns dias de uso contínuo.</p>',
+      modoUso: '<p>1 cápsula ao dia, pela manhã, em jejum, com água. Engula inteira, sem abrir ' +
+               'nem mastigar. O uso por conta própria não deve passar de 14 dias seguidos.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> omeprazol 20 mg.<br>' +
+                    '<strong>Excipientes:</strong> manitol, hipromelose, talco.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Omeprazol'], ['Concentração', '20 mg'],
+        ['Forma farmacêutica', 'Cápsula de liberação retardada'], ['Quantidade', '28 cápsulas'],
+        ['Classe terapêutica', 'Inibidor da bomba de prótons'],
+        ['Tipo de medicamento', 'Genérico — isento de prescrição (MIP)'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'MEDICAMENTO ISENTO DE PRESCRIÇÃO. AO PERSISTIREM OS SINTOMAS, O MÉDICO DEVERÁ ' +
+                  'SER CONSULTADO. Azia persistente por mais de 14 dias merece investigação ' +
+                  'médica. Leia a bula.',
+      relacionados: ['MED-ESC-10', 'MED-PAR-750']
+    },
+    {
+      sku: 'MED-LOR-10',
+      slug: 'loratadina-10mg-12-comprimidos',
+      nome: 'Loratadina 10mg 12 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Alergia',
+      preco: 7.9, precoDe: 11.9, precoClube: 6.72,
+      imagem: 'med-loratadina.svg', galeria: ['med-loratadina.svg'],
+      nota: 4.6, qtdAvaliacoes: 234, estoque: 110, destaque: false,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Antialérgico de dose única diária que não costuma dar sono.',
+      beneficios: ['Uma dose por dia', 'Baixa sonolência', 'Alívio de coriza e coceira'],
+      descricao: '<p>A loratadina é um anti-histamínico de segunda geração, indicado para rinite ' +
+                 'alérgica e urticária. Por atravessar pouco a barreira cerebral, causa bem menos ' +
+                 'sonolência que os antialérgicos antigos.</p>',
+      modoUso: '<p>Adultos e crianças acima de 12 anos: 1 comprimido ao dia. ' +
+               'Pode ser tomado com ou sem alimento.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> loratadina 10 mg.<br>' +
+                    '<strong>Excipientes:</strong> lactose, amido, estearato de magnésio.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Loratadina'], ['Concentração', '10 mg'],
+        ['Forma farmacêutica', 'Comprimido'], ['Quantidade', '12 comprimidos'],
+        ['Classe terapêutica', 'Anti-histamínico'],
+        ['Tipo de medicamento', 'Genérico — isento de prescrição (MIP)'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'MEDICAMENTO ISENTO DE PRESCRIÇÃO. AO PERSISTIREM OS SINTOMAS, O MÉDICO DEVERÁ ' +
+                  'SER CONSULTADO. Contém lactose. Leia a bula.',
+      relacionados: ['DER-HID-400', 'MED-PAR-750']
+    },
+    {
+      sku: 'MED-ESC-10',
+      slug: 'butilbrometo-escopolamina-dipirona-30-comprimidos',
+      nome: 'Butilbrometo de Escopolamina + Dipirona 30 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Estômago e digestão',
+      preco: 21.9, precoDe: 29.9, precoClube: 18.62,
+      imagem: 'med-escopolamina.svg', galeria: ['med-escopolamina.svg'],
+      nota: 4.7, qtdAvaliacoes: 198, estoque: 64, destaque: false,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Antiespasmódico com analgésico, para cólicas abdominais, menstruais e renais.',
+      beneficios: ['Age sobre a cólica e sobre a dor', 'Início de ação rápido', '30 comprimidos'],
+      descricao: '<p>Combina um antiespasmódico, que relaxa a musculatura lisa do trato ' +
+                 'digestivo e urinário, com um analgésico. É a associação mais usada para ' +
+                 'cólica menstrual e intestinal.</p>',
+      modoUso: '<p>Adultos: 1 a 2 comprimidos até 4 vezes ao dia, com um pouco de água. ' +
+               'Não ultrapasse 6 comprimidos em 24 horas.</p>',
+      ingredientes: '<p><strong>Princípios ativos:</strong> butilbrometo de escopolamina 10 mg e ' +
+                    'dipirona sódica 250 mg.</p>',
+      especificacoes: [
+        ['Princípios ativos', 'Butilbrometo de escopolamina + dipirona sódica'],
+        ['Concentração', '10 mg + 250 mg'], ['Forma farmacêutica', 'Comprimido revestido'],
+        ['Quantidade', '30 comprimidos'], ['Classe terapêutica', 'Antiespasmódico / analgésico'],
+        ['Tipo de medicamento', 'Genérico — isento de prescrição (MIP)'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'MEDICAMENTO ISENTO DE PRESCRIÇÃO. AO PERSISTIREM OS SINTOMAS, O MÉDICO DEVERÁ ' +
+                  'SER CONSULTADO. Não use em caso de glaucoma ou alergia à dipirona. Leia a bula.',
+      relacionados: ['MED-DIP-500', 'MED-OME-20']
+    },
+    {
+      sku: 'MED-AAS-100',
+      slug: 'acido-acetilsalicilico-100mg-30-comprimidos',
+      nome: 'Ácido Acetilsalicílico 100mg 30 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Cardiovascular',
+      preco: 6.9, precoDe: 9.9, precoClube: 5.87,
+      imagem: 'med-aas.svg', galeria: ['med-aas.svg'],
+      nota: 4.8, qtdAvaliacoes: 176, estoque: 130, destaque: false,
+      tags: ['Genérico'], generico: true,
+      resumo: 'Dose baixa de AAS, usada como antiagregante plaquetário sob orientação médica.',
+      beneficios: ['Dose de 100 mg', 'Uso contínuo de baixo custo', '30 comprimidos'],
+      descricao: '<p>Em dose baixa, o ácido acetilsalicílico reduz a agregação das plaquetas. ' +
+                 'É prescrito na prevenção de eventos cardiovasculares em pessoas com risco ' +
+                 'já avaliado por um médico.</p>',
+      modoUso: '<p>1 comprimido ao dia, após uma refeição, ou conforme a prescrição. ' +
+               'Não interrompa nem inicie o uso contínuo por conta própria.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> ácido acetilsalicílico 100 mg.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Ácido acetilsalicílico'], ['Concentração', '100 mg'],
+        ['Forma farmacêutica', 'Comprimido'], ['Quantidade', '30 comprimidos'],
+        ['Classe terapêutica', 'Antiagregante plaquetário'], ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'O uso contínuo em dose baixa deve ser sempre indicado e acompanhado por um ' +
+                  'médico: aumenta o risco de sangramento. Não use em crianças e adolescentes ' +
+                  'com quadro viral. Leia a bula.',
+      relacionados: ['MED-SIN-20', 'MED-LOS-50']
+    },
+
+    /* ---------------------------------------------- sob prescrição
+       Pelo site não há venda: o pedido vira reserva para retirada na loja,
+       com a receita apresentada ao farmacêutico. */
+    {
+      sku: 'MED-LOS-50',
+      slug: 'losartana-potassica-50mg-30-comprimidos',
+      nome: 'Losartana Potássica 50mg 30 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Cardiovascular',
+      preco: 14.9, precoDe: 22.9, precoClube: 12.67,
+      imagem: 'med-losartana.svg', galeria: ['med-losartana.svg'],
+      nota: 4.8, qtdAvaliacoes: 309, estoque: 85, destaque: true,
+      tags: ['Genérico'], generico: true,
+      receita: true, farmaciaPopular: 'gratuito',
+      resumo: 'Anti-hipertensivo de uso contínuo. Disponível gratuitamente pelo ' +
+              'programa Farmácia Popular, mediante receita.',
+      beneficios: ['Gratuito pelo Farmácia Popular', 'Dose única diária',
+                   'Uso contínuo com lembrete de recompra'],
+      descricao: '<p>A losartana é um antagonista do receptor da angiotensina II, usada no ' +
+                 'controle da pressão alta e na proteção renal de pessoas com diabetes. ' +
+                 'É medicamento de uso contínuo: o efeito depende da regularidade.</p>',
+      modoUso: '<p>Conforme a prescrição médica, normalmente 1 comprimido ao dia, sempre no ' +
+               'mesmo horário. Não interrompa por conta própria, mesmo sentindo-se bem — ' +
+               'a pressão alta costuma não dar sintomas.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> losartana potássica 50 mg.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Losartana potássica'], ['Concentração', '50 mg'],
+        ['Forma farmacêutica', 'Comprimido revestido'], ['Quantidade', '30 comprimidos'],
+        ['Classe terapêutica', 'Anti-hipertensivo'],
+        ['Venda', 'Sob prescrição médica — retenção de receita não exigida'],
+        ['Farmácia Popular', 'Gratuito'], ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'VENDA SOB PRESCRIÇÃO MÉDICA. Este item não é vendido pelo site: o pedido é ' +
+                  'uma reserva para retirada na loja, mediante apresentação da receita válida. ' +
+                  'Contraindicado na gravidez. Leia a bula.',
+      relacionados: ['MED-MET-850', 'MED-SIN-20', 'MED-AAS-100']
+    },
+    {
+      sku: 'MED-MET-850',
+      slug: 'metformina-850mg-30-comprimidos',
+      nome: 'Cloridrato de Metformina 850mg 30 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Diabetes',
+      preco: 12.9, precoDe: 18.9, precoClube: 10.97,
+      imagem: 'med-metformina.svg', galeria: ['med-metformina.svg'],
+      nota: 4.7, qtdAvaliacoes: 265, estoque: 72, destaque: false,
+      tags: ['Genérico'], generico: true,
+      receita: true, farmaciaPopular: 'gratuito',
+      resumo: 'Antidiabético oral de primeira linha no diabetes tipo 2. ' +
+              'Gratuito pelo Farmácia Popular, mediante receita.',
+      beneficios: ['Gratuito pelo Farmácia Popular', 'Primeira linha no diabetes tipo 2',
+                   'Uso contínuo com lembrete de recompra'],
+      descricao: '<p>A metformina reduz a produção de glicose pelo fígado e melhora a resposta ' +
+                 'do corpo à insulina. É o medicamento de escolha inicial no diabetes tipo 2 ' +
+                 'e não costuma causar queda de açúcar quando usada sozinha.</p>',
+      modoUso: '<p>Conforme a prescrição, normalmente junto às refeições para reduzir o ' +
+               'desconforto no estômago. A dose é ajustada aos poucos pelo médico.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> cloridrato de metformina 850 mg.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Cloridrato de metformina'], ['Concentração', '850 mg'],
+        ['Forma farmacêutica', 'Comprimido revestido'], ['Quantidade', '30 comprimidos'],
+        ['Classe terapêutica', 'Antidiabético oral'],
+        ['Venda', 'Sob prescrição médica'], ['Farmácia Popular', 'Gratuito'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'VENDA SOB PRESCRIÇÃO MÉDICA. Este item não é vendido pelo site: o pedido é ' +
+                  'uma reserva para retirada na loja, mediante apresentação da receita válida. ' +
+                  'Leia a bula.',
+      relacionados: ['MED-LOS-50', 'MED-SIN-20', 'VIT-DEE-60']
+    },
+    {
+      sku: 'MED-SIN-20',
+      slug: 'sinvastatina-20mg-30-comprimidos',
+      nome: 'Sinvastatina 20mg 30 Comprimidos — Genérico',
+      marca: 'Genérico', linha: 'Genéricos', categoria: 'medicamentos',
+      subcategoria: 'Cardiovascular',
+      preco: 17.9, precoDe: 26.9, precoClube: 15.22,
+      imagem: 'med-sinvastatina.svg', galeria: ['med-sinvastatina.svg'],
+      nota: 4.6, qtdAvaliacoes: 187, estoque: 58, destaque: false,
+      tags: ['Genérico'], generico: true,
+      receita: true, farmaciaPopular: 'desconto',
+      resumo: 'Reduz o colesterol LDL. Tem desconto pelo programa Farmácia Popular, ' +
+              'mediante receita.',
+      beneficios: ['Com desconto pelo Farmácia Popular', 'Tomada única à noite',
+                   'Uso contínuo com lembrete de recompra'],
+      descricao: '<p>A sinvastatina é uma estatina: reduz a produção de colesterol pelo fígado, ' +
+                 'baixando o LDL e o risco cardiovascular. O efeito aparece após algumas ' +
+                 'semanas de uso contínuo.</p>',
+      modoUso: '<p>Conforme a prescrição, normalmente 1 comprimido à noite, porque a produção ' +
+               'de colesterol pelo corpo é maior nesse período.</p>',
+      ingredientes: '<p><strong>Princípio ativo:</strong> sinvastatina 20 mg.</p>',
+      especificacoes: [
+        ['Princípio ativo', 'Sinvastatina'], ['Concentração', '20 mg'],
+        ['Forma farmacêutica', 'Comprimido revestido'], ['Quantidade', '30 comprimidos'],
+        ['Classe terapêutica', 'Hipolipemiante (estatina)'],
+        ['Venda', 'Sob prescrição médica'], ['Farmácia Popular', 'Com desconto'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'VENDA SOB PRESCRIÇÃO MÉDICA. Este item não é vendido pelo site: o pedido é ' +
+                  'uma reserva para retirada na loja, mediante apresentação da receita válida. ' +
+                  'Avise o médico se sentir dor muscular importante. Leia a bula.',
+      relacionados: ['MED-LOS-50', 'MED-AAS-100', 'VIT-OME-120']
+    },
+
+    /* ---------------------------------------------- higiene e cuidado */
+    {
+      sku: 'HIG-SOR-500',
+      slug: 'soro-fisiologico-0-9-500ml',
+      nome: 'Soro Fisiológico 0,9% 500ml',
+      marca: 'Genérico', linha: 'Cuidado diário', categoria: 'higiene',
+      subcategoria: 'Primeiros socorros',
+      preco: 8.9, precoDe: 12.9, precoClube: 7.57,
+      imagem: 'hig-soro.svg', galeria: ['hig-soro.svg'],
+      nota: 4.8, qtdAvaliacoes: 421, estoque: 180, destaque: false, tags: [],
+      resumo: 'Solução estéril de cloreto de sódio a 0,9%, para limpeza nasal, ' +
+              'ocular e de ferimentos.',
+      beneficios: ['Estéril', 'Serve para nariz, olhos e curativos', 'Frasco de 500 ml'],
+      descricao: '<p>Solução isotônica, com a mesma concentração de sal do corpo, por isso não ' +
+                 'arde nem irrita. Usada para lavagem nasal em resfriados e alergias, ' +
+                 'limpeza dos olhos e higienização de ferimentos.</p>',
+      modoUso: '<p>Para lavagem nasal, use com seringa ou dispositivo próprio. Para curativos, ' +
+               'aplique diretamente sobre a região. Após aberto, conserve refrigerado e use ' +
+               'em até 7 dias.</p>',
+      ingredientes: '<p>Cloreto de sódio 0,9% e água para injeção.</p>',
+      especificacoes: [
+        ['Composição', 'Cloreto de sódio 0,9%'], ['Conteúdo', '500 ml'],
+        ['Esterilidade', 'Estéril'], ['Uso', 'Nasal, ocular e em curativos'],
+        ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'Produto para uso externo. Não injete. Descarte o frasco 7 dias após a ' +
+                  'abertura.',
+      relacionados: ['HIG-ALC-500', 'MED-LOR-10']
+    },
+    {
+      sku: 'HIG-ALC-500',
+      slug: 'alcool-em-gel-70-500ml',
+      nome: 'Álcool em Gel 70% 500ml com Válvula',
+      marca: 'Genérico', linha: 'Cuidado diário', categoria: 'higiene',
+      subcategoria: 'Antissépticos',
+      preco: 13.9, precoDe: 18.9, precoClube: 11.82,
+      imagem: 'hig-alcool-gel.svg', galeria: ['hig-alcool-gel.svg'],
+      nota: 4.5, qtdAvaliacoes: 267, estoque: 150, destaque: false, tags: [],
+      resumo: 'Antisséptico para as mãos, na concentração de 70% recomendada pela ANVISA.',
+      beneficios: ['Concentração de 70%, a mais eficaz', 'Válvula dosadora',
+                   'Com hidratante na fórmula'],
+      descricao: '<p>A 70% o álcool desnatura proteínas de forma mais eficiente que em ' +
+                 'concentrações mais altas, porque a água presente facilita a penetração na ' +
+                 'membrana dos microrganismos. A fórmula em gel leva umectante para reduzir ' +
+                 'o ressecamento das mãos.</p>',
+      modoUso: '<p>Aplique uma porção nas mãos secas e espalhe até evaporar, por cerca de ' +
+               '20 segundos. Não substitui a lavagem com água e sabão quando há sujeira visível.</p>',
+      ingredientes: '<p>Álcool etílico 70% v/v, carbômero, glicerina, trietanolamina, água.</p>',
+      especificacoes: [
+        ['Composição', 'Álcool etílico 70% v/v'], ['Conteúdo', '500 ml'],
+        ['Apresentação', 'Gel com válvula dosadora'], ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'Produto inflamável. Uso externo. Mantenha longe do fogo e fora do alcance ' +
+                  'de crianças.',
+      relacionados: ['HIG-SOR-500', 'HIG-CRE-90']
+    },
+    {
+      sku: 'VIT-VTC-10',
+      slug: 'vitamina-c-1g-10-comprimidos-efervescentes',
+      nome: 'Vitamina C 1g 10 Comprimidos Efervescentes',
+      marca: 'Vitalis', linha: 'Essenciais', categoria: 'vitaminas',
+      subcategoria: 'Vitaminas',
+      preco: 14.9, precoDe: 19.9, precoClube: 12.67,
+      imagem: 'vit-c-eferv.svg', galeria: ['vit-c-eferv.svg'],
+      nota: 4.4, qtdAvaliacoes: 198, estoque: 92, destaque: false, tags: [],
+      resumo: 'Vitamina C efervescente de 1 g, sabor laranja. Dissolve rápido e é fácil de tomar.',
+      beneficios: ['1 g por comprimido', 'Contribui para o sistema imunológico',
+                   'Sabor laranja, sem açúcar'],
+      descricao: '<p>A vitamina C é antioxidante e participa da formação do colágeno e da ' +
+                 'absorção do ferro de origem vegetal. A forma efervescente facilita a ingestão ' +
+                 'e a absorção.</p>',
+      modoUso: '<p>Dissolva 1 comprimido em um copo de água (200 ml) e beba em seguida, ' +
+               'uma vez ao dia.</p>',
+      ingredientes: '<p>Ácido ascórbico, bicarbonato de sódio, ácido cítrico, aroma de laranja, ' +
+                    'edulcorante sucralose.</p>',
+      especificacoes: [
+        ['Tipo de produto', 'Suplemento alimentar'], ['Concentração', '1 g por comprimido'],
+        ['Quantidade', '10 comprimidos efervescentes'], ['Sabor', 'Laranja'],
+        ['Açúcar', 'Não contém'], ['País de origem', 'Brasil']
+      ],
+      avisoLegal: 'Este produto não é um medicamento. Não exceder a recomendação diária de ' +
+                  'consumo. Gestantes, nutrizes e crianças devem consultar o médico antes ' +
+                  'de consumir.',
+      relacionados: ['VIT-DEE-60', 'VIT-MAG-90']
     }
   ];
 

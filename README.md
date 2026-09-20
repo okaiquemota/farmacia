@@ -49,15 +49,75 @@ Sem parâmetros, `produto.html` abre o produto principal
 - **Barra fixa de compra** ao rolar, relacionados e vistos recentemente
 - **JSON-LD** `schema.org/Product` gerado para cada produto
 
+## Medicamentos
+
+O catálogo traz 26 itens. Os genéricos usam nome de substância, que é como
+genérico se identifica — paracetamol, omeprazol, loratadina, losartana.
+
+Dois estados que uma farmácia precisa e uma loja genérica não tem:
+
+- **Venda sob prescrição** (`receita: true`). O item aparece na busca e nas
+  categorias, mas não entra no carrinho: o botão vira *Reservar para retirada*,
+  e a PDP explica que a receita é apresentada ao farmacêutico na loja. O
+  bloqueio também vale no `Loja.adicionar`, para o caso de alguém chamar a
+  função direto. Esses itens ficam fora da vitrine "Ofertas do dia", que é de
+  compra por impulso.
+- **Farmácia Popular** (`farmaciaPopular: 'gratuito' | 'desconto'`). Marca os
+  medicamentos cobertos pelo programa, com selo no cartão e explicação na PDP
+  ligando para a página do programa.
+
+## Movimento
+
+Tokens em `:root` (`--mov-rapido`, `--mov-medio`, `--mov-lento` e três curvas)
+governam toda a animação; nenhum componente crava duração própria. Só
+`transform` e `opacity` são animados — o navegador resolve na GPU, sem
+recalcular layout.
+
+- **Revelação ao rolar** (`assets/js/animacoes.js`): um `IntersectionObserver`
+  marca seções, cartões e painéis, com escalonamento de até seis passos dentro
+  de cada grupo de irmãos.
+- **Conteúdo novo entra sozinho.** Um `MutationObserver` no container cobre
+  filtros, paginação e a carga vinda do banco, sem instrumentar cada página.
+- **Cartão de produto** amplia a imagem no hover, o coração pulsa ao favoritar
+  e o contador do carrinho pulsa quando muda.
+- **Painéis que trocam** — aba, acordeão, etapa do checkout, detalhe do pedido
+  — entram com uma subida curta em vez de aparecer secos.
+
+Três cuidados que o movimento exige:
+
+- **Nada pode ficar escondido.** O estado inicial invisível só é aplicado com a
+  classe `js-ativo`, que o próprio script adiciona; sem JS o conteúdo aparece
+  normal. Há ainda uma rede de segurança que revela tudo após 3 s caso o
+  observador falhe.
+- **Cartão em prateleira horizontal fica de fora.** Os que estão à direita
+  nunca intersectam a janela no eixo X e continuariam invisíveis — quem ganha
+  a entrada é a prateleira inteira.
+- **`prefers-reduced-motion` desliga tudo**, inclusive a revelação, que passa a
+  nascer visível.
+
 ## Navegação e checkout
 
-- **Cabeçalho retrátil.** Ao passar de 220px de rolagem ele encolhe de 127px
-  para 61px, escondendo a régua de categorias e devolvendo a altura à página;
-  volta ao completo perto do topo. A decisão usa histerese de posição (faixa
-  morta de 120 a 220px), e não a direção da rolagem — encolher o cabeçalho
-  muda a altura do documento e dispara novos eventos de rolagem, o que faria
-  uma regra por direção oscilar. A altura corrente fica na variável CSS
-  `--topo-fixo`, usada pelos blocos `sticky` para não passarem por baixo dele.
+- **Quem gruda é o `#cabecalho`, não o `.cabecalho` de dentro.** `position:
+  sticky` prende o elemento à caixa do **pai**. Com o sticky no filho, o pai
+  media só a própria altura, e passados esses ~160px de rolagem o cabeçalho ia
+  embora junto com ele. No `#cabecalho` o pai é o `<body>`, que acompanha a
+  página inteira. A barra de aviso fica fora dele, para subir e sumir.
+- **Blocos laterais precisam de invólucro que estica.** Filtros e resumo do
+  carrinho também não grudavam: o `div` em volta encolhia até o tamanho deles e
+  não sobrava curso. `align-self: stretch` no invólucro resolve. A caixa de
+  compra da PDP não tem sticky de propósito — é mais alta que a coluna vizinha,
+  então nunca haveria curso; quem assume ali é a `.barra-fixa`.
+- **Âncoras** usam `scroll-margin-top` com a altura corrente do cabeçalho, senão
+  o alvo pára atrás dele.
+- **Cabeçalho retrátil.** Descendo, ele encolhe de 127px para 61px e esconde a
+  régua de categorias; subindo, volta inteiro na hora, sem precisar chegar ao
+  topo. A decisão é por direção, mas não pode ser tomada a cada quadro:
+  encolher o cabeçalho encurta o documento, o navegador dispara rolagem por
+  causa disso e a direção aparente se inverte, fazendo o estado piscar. Duas
+  defesas resolvem — um acumulador com limiar de 50px, para que um
+  deslocamento de poucos pixels nunca troque o estado, e a ressincronização da
+  referência depois que o layout assenta. A altura corrente fica na variável
+  CSS `--topo-fixo`, usada pelos blocos `sticky` para não passarem por baixo.
 - **Menu mobile.** Abaixo de 860px a régua de categorias vira uma gaveta
   lateral com categorias, conta e ajuda, aberta pelo hambúrguer.
 - **Checkout em etapas.** Identificação → entrega (com CEP, endereços salvos e
@@ -115,7 +175,7 @@ banco. Em `supabase/migrations/` estão o esquema e a carga inicial:
 | Arquivo | Conteúdo |
 |---|---|
 | `0001_schema.sql` | 9 tabelas no schema `farmacia`, índices, triggers e RLS |
-| `0002_carga_inicial.sql` | 7 categorias, 14 produtos, 17 lojas, 9 serviços, 3 cupons, 13 faixas de frete |
+| `0002_carga_inicial.sql` | 7 categorias, 26 produtos, 17 lojas, 9 serviços, 3 cupons, 13 faixas de frete |
 
 Decisões que valem saber:
 
@@ -168,7 +228,8 @@ alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
 
-O esquema é validado contra um Postgres real: as duas migrations são aplicadas
+São oito suítes, somando 209 checagens. O esquema é validado contra um
+Postgres real: as duas migrations são aplicadas
 do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
 catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste
 de mapeamento pega as linhas reais do banco e confirma que o catálogo resultante

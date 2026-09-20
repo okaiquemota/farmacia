@@ -40,6 +40,14 @@ create table farmacia.produtos (
 
   destaque        boolean not null default false,
   generico        boolean not null default false,
+
+  -- medicamento sob prescrição não é vendido pelo site: vira reserva para
+  -- retirada na loja, com a receita apresentada ao farmacêutico
+  receita         boolean not null default false,
+
+  -- cobertura pelo programa do Ministério da Saúde, quando houver
+  farmacia_popular text check (farmacia_popular in ('gratuito', 'desconto')),
+
   tags            text[] not null default '{}',
 
   resumo          text not null,

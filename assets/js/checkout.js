@@ -131,7 +131,9 @@
 
     var opcoes = [
       ['pix', 'PIX', L.moeda(L.precoPix(bruto)) + ' — 5% de desconto', 'pix'],
-      ['cartao', 'Cartão de crédito', 'até ' + parc.vezes + 'x de ' + L.moeda(parc.valor) + ' sem juros', 'cartao'],
+      ['cartao', 'Cartão de crédito',
+        parc.vezes > 1 ? 'até ' + parc.vezes + 'x de ' + L.moeda(parc.valor) + ' sem juros'
+                       : L.moeda(bruto) + ' à vista', 'cartao'],
       ['boleto', 'Boleto bancário', L.moeda(bruto) + ' — compensa em até 3 dias úteis', 'cartao']
     ];
 
@@ -176,7 +178,9 @@
       var parc = L.parcelamento(totalSemPix());
       var opcoes = '';
       for (var i = 1; i <= parc.vezes; i++) {
-        opcoes += '<option value="' + i + '">' + i + 'x de ' + L.moeda(totalSemPix() / i) + ' sem juros</option>';
+        opcoes += '<option value="' + i + '">' +
+          (i === 1 ? 'À vista — ' + L.moeda(totalSemPix())
+                   : i + 'x de ' + L.moeda(totalSemPix() / i) + ' sem juros') + '</option>';
       }
       return '<div class="caixa-pagamento"><div class="campos">' +
         campo('cartao_numero', 'Número do cartão', '', 'text', true, '0000 0000 0000 0000') +

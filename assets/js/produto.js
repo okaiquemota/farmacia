@@ -54,6 +54,11 @@
     if (produto.estoque <= 0) selos += '<span class="selo selo--esgotado">Indisponível</span>';
     else if (off > 0) selos += '<span class="selo selo--oferta">-' + off + '% OFF</span>';
     if (produto.generico) selos += '<span class="selo selo--generico">Genérico</span>';
+    if (produto.receita) selos += '<span class="selo selo--receita">Sob prescrição</span>';
+    if (produto.farmaciaPopular) {
+      selos += '<span class="selo selo--popular">Farmácia Popular' +
+        (produto.farmaciaPopular === 'gratuito' ? ' · grátis' : '') + '</span>';
+    }
 
     return '<div class="galeria">' +
       '<div class="galeria__miniaturas" role="tablist" aria-label="Imagens do produto">' +
@@ -129,8 +134,10 @@
         '<div class="compra__principal">' + L.moeda(preco) + '</div>' +
         '<div class="compra__pix">' + L.icone('pix', 15) +
           L.moeda(L.precoPix(preco)) + ' no PIX (5% de desconto)</div>' +
-        '<div class="compra__parcelas">ou até ' + parc.vezes + 'x de ' +
-          L.moeda(parc.valor) + ' sem juros no cartão</div>' +
+        (parc.vezes > 1
+          ? '<div class="compra__parcelas">ou até ' + parc.vezes + 'x de ' +
+            L.moeda(parc.valor) + ' sem juros no cartão</div>'
+          : '<div class="compra__parcelas">ou à vista no cartão</div>') +
       '</div>' +
 
       (clube ? '<div class="compra__clube">' +
@@ -142,6 +149,7 @@
       '<div class="estoque estoque--' + estoqueClasse + '">' +
         '<span class="ponto"></span>' + estoqueTexto + '</div>' +
 
+      (produto.receita ? '' :
       '<div class="quantidade">' +
         '<div class="contador">' +
           '<button type="button" data-qtd="-1" aria-label="Diminuir quantidade">−</button>' +
@@ -151,12 +159,27 @@
         '</div>' +
         '<span style="font-size:12.5px;color:var(--tinta-500)">Máx. ' +
           Math.max(1, produto.estoque) + ' un. por pedido</span>' +
-      '</div>' +
+      '</div>') +
 
-      '<button class="btn btn--compra btn--bloco" type="button" id="btn-comprar"' +
-        (fora ? ' disabled' : '') + '>' +
-        L.icone('sacola', 18) + (fora ? ' Produto indisponível' : ' Adicionar ao carrinho') + '</button>' +
-      (fora ? '<button class="btn btn--contorno btn--bloco" type="button" id="btn-avise">Avise-me quando chegar</button>' : '') +
+      (produto.receita
+        ? '<div class="caixa-receita">' +
+            '<b>' + L.icone('escudo', 16) + ' Venda sob prescrição médica</b>' +
+            '<p>Este medicamento não é vendido pelo site. Reserve aqui e retire em uma das ' +
+            D.config.totalLojas + ' lojas, apresentando a receita válida ao farmacêutico.</p>' +
+            (produto.farmaciaPopular
+              ? '<p class="popular-nota">' + L.icone('cheque', 14) + ' ' +
+                (produto.farmaciaPopular === 'gratuito'
+                  ? 'Disponível <strong>gratuitamente</strong> pelo Farmácia Popular.'
+                  : 'Disponível <strong>com desconto</strong> pelo Farmácia Popular.') +
+                ' <a href="institucional.html?p=farmacia-popular">Como funciona</a></p>'
+              : '') +
+          '</div>' +
+          '<button class="btn btn--compra btn--bloco" type="button" id="btn-reservar">' +
+            L.icone('local', 18) + ' Reservar para retirada</button>'
+        : '<button class="btn btn--compra btn--bloco" type="button" id="btn-comprar"' +
+          (fora ? ' disabled' : '') + '>' +
+          L.icone('sacola', 18) + (fora ? ' Produto indisponível' : ' Adicionar ao carrinho') + '</button>' +
+          (fora ? '<button class="btn btn--contorno btn--bloco" type="button" id="btn-avise">Avise-me quando chegar</button>' : '')) +
 
       '<div class="frete">' +
         '<span class="frete__titulo">' + L.icone('caminhao', 17) + ' Calcular frete e prazo</span>' +
@@ -314,8 +337,10 @@
       '<img src="assets/img/' + L.escapar(produto.imagem) + '" alt="" width="48" height="48">' +
       '<span class="barra-fixa__nome">' + L.escapar(produto.nome) + '</span>' +
       '<span class="barra-fixa__preco" id="barra-preco">' + L.moeda(precoAtual()) + '</span>' +
-      '<button class="btn btn--compra" type="button" id="btn-comprar-fixo"' +
-        (produto.estoque <= 0 ? ' disabled' : '') + '>Adicionar</button>' +
+      (produto.receita
+        ? '<a class="btn btn--compra" href="#compra">Reservar</a>'
+        : '<button class="btn btn--compra" type="button" id="btn-comprar-fixo"' +
+          (produto.estoque <= 0 ? ' disabled' : '') + '>Adicionar</button>') +
     '</div></div>';
   }
 
@@ -382,6 +407,7 @@
     var campoQtd = documento.getElementById('qtd');
 
     documento.querySelectorAll('[data-qtd]').forEach(function (btn) {
+      if (!campoQtd) return;
       btn.addEventListener('click', function () {
         var delta = Number(btn.getAttribute('data-qtd'));
         var novo = Math.min(Math.max(1, Number(campoQtd.value) + delta), Math.max(1, produto.estoque));
@@ -389,10 +415,18 @@
       });
     });
 
+    var reservar = documento.getElementById('btn-reservar');
+    if (reservar) {
+      reservar.addEventListener('click', function () {
+        L.aviso('Reserva registrada. Retire na loja com a receita em mãos.', 'ok');
+      });
+    }
+
     var comprar = documento.getElementById('btn-comprar');
     if (comprar) {
       comprar.addEventListener('click', function () {
-        L.adicionar(produto.sku, Number(campoQtd.value) || 1, variacaoAtual ? variacaoAtual.id : null);
+        L.adicionar(produto.sku, (campoQtd && Number(campoQtd.value)) || 1,
+                    variacaoAtual ? variacaoAtual.id : null);
       });
     }
 
@@ -414,7 +448,7 @@
     if (salvo) { campoCep.value = salvo; mostrarFrete(salvo); }
 
     function mostrarFrete(cep) {
-      var r = L.calcularFrete(cep, precoAtual() * (Number(campoQtd.value) || 1));
+      var r = L.calcularFrete(cep, precoAtual() * (campoQtd ? Number(campoQtd.value) || 1 : 1));
       if (r.erro) { saida.innerHTML = '<p class="frete__erro">' + L.escapar(r.erro) + '</p>'; return; }
 
       L.guardar(L.chaves.cep, cep);

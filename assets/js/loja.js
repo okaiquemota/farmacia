@@ -33,8 +33,11 @@
     menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
     celular: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
     carro: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4"/><path d="M3 17h18v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2M7 20v-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/>',
-    zap: '<path d="M21 11.6a8.5 8.5 0 0 1-12.6 7.5L3 21l1.9-5.3A8.5 8.5 0 1 1 21 11.6Z"/>' +
-         '<path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l-.9 1.3a1.3 1.3 0 0 1-1.5.4 9.4 9.4 0 0 1-5.3-5.3 1.3 1.3 0 0 1 .4-1.5z" fill="currentColor" stroke="none"/>',
+    /* balão de conversa, no mesmo traço dos demais ícones do conjunto */
+    zap: '<path d="M7 4h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-5l-5 4v-4a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/>' +
+         '<g fill="currentColor" stroke="none">' +
+         '<circle cx="8.6" cy="10" r="1.05"/><circle cx="12" cy="10" r="1.05"/>' +
+         '<circle cx="15.4" cy="10" r="1.05"/></g>',
     camera: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
     globo: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15 0 18-2.5-3-2.5-15.4 0-18Z"/>',
     cabelos: '<path d="M12 3a7 7 0 0 0-7 7v11h3v-8a4 4 0 0 1 8 0v8h3V10a7 7 0 0 0-7-7Z"/>',
@@ -196,6 +199,10 @@
   function adicionar(sku, qtd, variacao) {
     var produto = D.porSku(sku);
     if (!produto) return;
+    if (produto.receita) {
+      aviso('Este medicamento exige receita e é retirado na loja.', 'erro');
+      return;
+    }
     if (produto.estoque <= 0) { aviso('Produto indisponível no momento.', 'erro'); return; }
 
     var q = Math.max(1, qtd || 1);
@@ -317,6 +324,11 @@
     if (fora) selos += '<span class="selo selo--esgotado">Indisponível</span>';
     else if (off > 0) selos += '<span class="selo selo--oferta">-' + off + '%</span>';
     if (p.generico) selos += '<span class="selo selo--generico">Genérico</span>';
+    if (p.receita) selos += '<span class="selo selo--receita">Sob prescrição</span>';
+    if (p.farmaciaPopular) {
+      selos += '<span class="selo selo--popular">Farmácia Popular' +
+        (p.farmaciaPopular === 'gratuito' ? ' · grátis' : '') + '</span>';
+    }
     (p.tags || []).forEach(function (t) { selos += '<span class="selo selo--novo">' + escapar(t) + '</span>'; });
 
     var href = 'produto.html?sku=' + encodeURIComponent(p.sku);
@@ -338,14 +350,22 @@
         '<div class="cartao__precos">' +
           (off > 0 ? '<span class="preco-antigo">' + moeda(p.precoDe) + '</span>' : '') +
           '<span class="preco-atual">' + moeda(p.preco) + '</span>' +
-          '<span class="preco-parcela">ou ' + parc.vezes + 'x de ' + moeda(parc.valor) + ' sem juros</span>' +
+          /* uma parcela não é parcelamento: abaixo da parcela mínima a linha some */
+          (parc.vezes > 1
+            ? '<span class="preco-parcela">ou ' + parc.vezes + 'x de ' + moeda(parc.valor) + ' sem juros</span>'
+            : '<span class="preco-parcela">à vista no cartão</span>') +
           (p.precoClube ? '<span class="preco-clube">' + icone('coracao', 12, true) +
             'Clube ' + moeda(p.precoClube) + '</span>' : '') +
         '</div>' +
-        (op.semBotao ? '' :
-          '<button class="btn ' + (fora ? 'btn--neutro' : 'btn--principal') + ' btn--bloco" type="button" ' +
-          'data-add="' + escapar(p.sku) + '"' + (fora ? ' disabled' : '') + '>' +
-          (fora ? 'Avise-me' : icone('sacola', 16) + ' Adicionar') + '</button>') +
+        (op.semBotao ? ''
+          : p.receita
+            /* pelo site não há venda de medicamento com receita: o caminho é
+               a reserva para retirada, com a receita apresentada na loja */
+            ? '<a class="btn btn--contorno btn--bloco" href="' + href + '">' +
+              icone('escudo', 16) + ' Reservar na loja</a>'
+            : '<button class="btn ' + (fora ? 'btn--neutro' : 'btn--principal') + ' btn--bloco" type="button" ' +
+              'data-add="' + escapar(p.sku) + '"' + (fora ? ' disabled' : '') + '>' +
+              (fora ? 'Avise-me' : icone('sacola', 16) + ' Adicionar') + '</button>') +
       '</article>';
   }
 
@@ -373,12 +393,20 @@
       return '<li><a href="institucional.html?p=' + i[0] + '">' + i[1] + '</a></li>';
     }).join('');
 
-    alvo.innerHTML = '' +
+    var aviso = '' +
       '<div class="barra-aviso">' +
         '<strong>Frete grátis</strong> acima de ' + moeda(CFG.freteGratisAcima) +
         ' · Disk Entrega <a href="' + CFG.whatsappLink + '" rel="noopener">' + CFG.whatsapp + '</a>' +
         ' · ' + CFG.totalLojas + ' lojas em ' + CFG.cidades.length + ' cidades' +
-      '</div>' +
+      '</div>';
+
+    /* a barra de aviso é irmã do #cabecalho, não filha: ela rola e some,
+       enquanto o #cabecalho fica grudado no topo */
+    if (!documento.querySelector('.barra-aviso')) {
+      alvo.insertAdjacentHTML('beforebegin', aviso);
+    }
+
+    alvo.innerHTML = '' +
       '<div class="cabecalho">' +
         '<div class="container cabecalho__topo">' +
           '<button class="menu-hamburguer" type="button" data-abrir-menu aria-label="Abrir menu de categorias">' +
@@ -591,38 +619,64 @@
   }
 
   /* ------------------------------------------------------------ cabeçalho fixo */
-  /* O cabeçalho encolhe depois que a pessoa desce um pouco, devolvendo à página
-     a altura da régua de categorias.
+  /* O cabeçalho encolhe ao descer e volta inteiro ao subir, devolvendo à
+     página a altura da régua de categorias.
 
-     A decisão usa só a posição da rolagem, com uma faixa morta entre 120 e
-     220px. Decidir pela direção do movimento não funciona aqui: encolher o
-     cabeçalho reduz a altura do documento, o navegador dispara novos eventos de
-     rolagem por causa disso, e a direção aparente se inverte — o estado fica
-     piscando. Com histerese, o resultado depende apenas de onde a página está. */
+     A decisão é por direção, que é o que a pessoa espera, mas não pode ser
+     tomada a cada quadro: encolher o cabeçalho encurta o documento, o
+     navegador dispara rolagem por causa disso, e a direção aparente se
+     inverte — o estado fica piscando. Duas defesas resolvem:
+
+       1. um acumulador com limiar, para que um deslocamento de poucos pixels
+          nunca troque o estado;
+       2. ressincronizar a referência depois que o layout assenta, para o
+          próprio salto de altura não ser lido como rolagem da pessoa. */
   function ligarCabecalhoFixo() {
     var barra = documento.querySelector('.cabecalho');
     if (!barra) return;
 
-    var ENCOLHE_EM = 220;
-    var EXPANDE_EM = 120;
+    var ENCOLHE_APOS = 200;   // não encolhe no comecinho da página
+    var VOLTA_ATE = 80;       // perto do topo, sempre inteiro
+    var GATILHO = 50;         // movimento acumulado para trocar de estado
 
     function medir() {
-      documento.documentElement.style.setProperty('--topo-fixo', barra.offsetHeight + 'px');
+      var h = barra.offsetHeight;
+      documento.documentElement.style.setProperty('--topo-fixo', h + 'px');
+      /* guarda a altura do estado expandido: é ela que a margem de rolagem
+         precisa reservar, já que rolar para cima reexpande o cabeçalho */
+      if (!compacto) documento.documentElement.style.setProperty('--topo-cheio', h + 'px');
     }
 
     var compacto = false;
+    var ultimo = janela.scrollY;
+    var acumulado = 0;
     var agendado = false;
+
+    function aplicar(novoEstado) {
+      if (novoEstado === compacto) return;
+      compacto = novoEstado;
+      barra.classList.toggle('cabecalho--compacto', compacto);
+      acumulado = 0;
+      janela.requestAnimationFrame(function () {
+        ultimo = janela.scrollY;
+        medir();
+      });
+    }
 
     function aoRolar() {
       agendado = false;
       var y = janela.scrollY;
+      var delta = y - ultimo;
+      ultimo = y;
 
-      if (!compacto && y > ENCOLHE_EM) compacto = true;
-      else if (compacto && y < EXPANDE_EM) compacto = false;
-      else return;
+      if (y <= VOLTA_ATE) { aplicar(false); return; }
 
-      barra.classList.toggle('cabecalho--compacto', compacto);
-      medir();
+      /* inverteu a direção: o acumulado recomeça */
+      if ((delta > 0 && acumulado < 0) || (delta < 0 && acumulado > 0)) acumulado = 0;
+      acumulado += delta;
+
+      if (acumulado > GATILHO && y > ENCOLHE_APOS) aplicar(true);
+      else if (acumulado < -GATILHO) aplicar(false);
     }
 
     janela.addEventListener('scroll', function () {
@@ -638,6 +692,34 @@
 
     janela.addEventListener('resize', medir);
     medir();
+  }
+
+  /* ------------------------------------------------------------ âncoras */
+  /* Pular para uma âncora rola a página, o cabeçalho muda de altura no meio do
+     percurso e o navegador reposiciona a rolagem depois de já ter calculado o
+     destino — o alvo acaba encostando no cabeçalho em vez de parar abaixo
+     dele. Reposicionar uma vez, com tudo assentado, resolve sem depender de
+     acertar a margem no chute. */
+  function ligarAncoras() {
+    function reposicionar() {
+      var id = decodeURIComponent(janela.location.hash.slice(1));
+      if (!id) return;
+      var alvo = documento.getElementById(id);
+      if (!alvo) return;
+      janela.setTimeout(function () {
+        alvo.scrollIntoView({ block: 'start', behavior: 'auto' });
+      }, 450);
+    }
+
+    janela.addEventListener('hashchange', reposicionar);
+    if (janela.location.hash) reposicionar();
+
+    /* Foco por teclado que pára parcialmente atrás do cabeçalho é limitação
+       conhecida de cabeçalho preso: o navegador só rola quando o elemento está
+       fora da janela, e atrás do cabeçalho ele conta como dentro. Tentar
+       corrigir por script briga com a rolagem em curso e produz saltos piores
+       que o problema, então fica como está. O scroll-margin-top acima já cobre
+       todos os casos em que o navegador decide rolar. */
   }
 
   function abrirGaveta() {
@@ -787,6 +869,7 @@
     fecharGaveta();
     ligarEventosGlobais();
     ligarCabecalhoFixo();
+    ligarAncoras();
     montarZapFlutuante();
   }
 
