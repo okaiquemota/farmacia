@@ -132,6 +132,44 @@
   var CHAVE_CEP = 'bv:cep';
   var CHAVE_AVALIACOES = 'bv:avaliacoes';
 
+  var CHAVE_CLIENTE = 'bv:cliente';
+  var CHAVE_PEDIDOS = 'bv:pedidos';
+  var CHAVE_ENDERECOS = 'bv:enderecos';
+
+  function pedidos() { return recuperar(CHAVE_PEDIDOS, []); }
+
+  function salvarPedido(pedido) {
+    var lista = pedidos();
+    lista.unshift(pedido);
+    guardar(CHAVE_PEDIDOS, lista.slice(0, 30));
+    return pedido;
+  }
+
+  function enderecos() { return recuperar(CHAVE_ENDERECOS, []); }
+
+  function salvarEndereco(end) {
+    var lista = enderecos().filter(function (e) { return e.cep !== end.cep; });
+    lista.unshift(end);
+    guardar(CHAVE_ENDERECOS, lista.slice(0, 5));
+  }
+
+  function novoNumeroPedido() {
+    return 'BV-' + String(Math.floor(Math.random() * 900000) + 100000);
+  }
+
+  function clienteLogado() { return recuperar(CHAVE_CLIENTE, null); }
+
+  function saudacao() {
+    var c = clienteLogado();
+    return c ? 'Olá, ' + String(c.nome).split(' ')[0] : 'Olá, visitante';
+  }
+
+  function entrar(cliente) { guardar(CHAVE_CLIENTE, cliente); }
+
+  function sair() {
+    try { janela.localStorage.removeItem(CHAVE_CLIENTE); } catch (e) { /* modo privado */ }
+  }
+
   var carrinho = recuperar(CHAVE_CARRINHO, []);
   var favoritos = recuperar(CHAVE_FAVORITOS, []);
 
@@ -334,6 +372,8 @@
       '</div>' +
       '<div class="cabecalho">' +
         '<div class="container cabecalho__topo">' +
+          '<button class="menu-hamburguer" type="button" data-abrir-menu aria-label="Abrir menu de categorias">' +
+            icone('menu', 24) + '</button>' +
           '<a class="cabecalho__logo" href="index.html" aria-label="' + escapar(CFG.nomeLoja) + ' — página inicial">' +
             '<img src="assets/img/logo.svg" alt="' + escapar(CFG.nomeLoja) + '" width="300" height="64">' +
           '</a>' +
@@ -347,14 +387,16 @@
             '<div class="busca__sugestoes oculto" id="sugestoes" role="listbox" aria-label="Sugestões de busca"></div>' +
           '</div>' +
           '<div class="acoes">' +
-            '<a class="acao" href="#conta"><span>' + icone('usuario') + '</span>' +
-              '<span class="acao__texto"><small>Olá, visitante</small><b>Entrar</b></span></a>' +
-            '<a class="acao" href="#favoritos"><span>' + icone('coracao') + '</span>' +
-              '<span class="acao__contador" data-contador-favoritos>0</span>' +
+            '<a class="acao" href="conta.html"><span class="acao__icone">' + icone('usuario') + '</span>' +
+              '<span class="acao__texto"><small>' + escapar(saudacao()) + '</small><b>' +
+              (clienteLogado() ? 'Minha conta' : 'Entrar') + '</b></span></a>' +
+            '<a class="acao" href="favoritos.html">' +
+              '<span class="acao__icone">' + icone('coracao') +
+                '<span class="acao__contador" data-contador-favoritos>0</span></span>' +
               '<span class="acao__texto"><small>Meus</small><b>Favoritos</b></span></a>' +
             '<button class="acao" type="button" data-abrir-carrinho>' +
-              '<span>' + icone('sacola') + '</span>' +
-              '<span class="acao__contador" data-contador-carrinho>0</span>' +
+              '<span class="acao__icone">' + icone('sacola') +
+                '<span class="acao__contador" data-contador-carrinho>0</span></span>' +
               '<span class="acao__texto"><small>Meu</small><b>Carrinho</b></span></button>' +
           '</div>' +
         '</div>' +
@@ -430,9 +472,9 @@
       '<div class="gaveta__rodape" id="gaveta-rodape"></div>';
     documento.body.appendChild(gaveta);
 
-    cortina.addEventListener('click', fecharGaveta);
+    cortina.addEventListener('click', function () { fecharGaveta(); fecharMenu(); });
     documento.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') fecharGaveta();
+      if (e.key === 'Escape') { fecharGaveta(); fecharMenu(); }
     });
 
     desenharGaveta();
@@ -479,6 +521,116 @@
       '<button class="btn btn--neutro btn--bloco" type="button" data-fechar-carrinho>Continuar comprando</button>';
   }
 
+  /* ------------------------------------------------------------ menu mobile */
+  function montarMenuMobile() {
+    if (documento.getElementById('gaveta-menu')) return;
+
+    var cliente = clienteLogado();
+
+    var menu = documento.createElement('nav');
+    menu.className = 'gaveta gaveta--esq';
+    menu.id = 'gaveta-menu';
+    menu.setAttribute('aria-hidden', 'true');
+    menu.setAttribute('aria-label', 'Menu de categorias');
+    menu.innerHTML =
+      '<div class="gaveta__topo">' +
+        '<h2>' + (cliente ? escapar(saudacao()) : 'Menu') + '</h2>' +
+        '<button class="gaveta__fechar" type="button" data-fechar-menu aria-label="Fechar menu">' +
+          icone('fechar') + '</button>' +
+      '</div>' +
+      '<div class="gaveta__corpo">' +
+        '<p class="menu-secao">Categorias</p>' +
+        '<ul class="menu-lista-mobile">' +
+          D.categorias.map(function (c) {
+            return '<li><a href="categoria.html?cat=' + c.id + '">' +
+              '<span class="icone-cat">' + icone(c.icone, 18) + '</span>' +
+              escapar(c.nome) + '</a></li>';
+          }).join('') +
+        '</ul>' +
+        '<p class="menu-secao">Minha conta</p>' +
+        '<ul class="menu-lista-mobile">' +
+          '<li><a href="conta.html"><span class="icone-cat">' + icone('usuario', 18) + '</span>' +
+            (cliente ? 'Meus pedidos' : 'Entrar ou cadastrar') + '</a></li>' +
+          '<li><a href="favoritos.html"><span class="icone-cat">' + icone('coracao', 18) + '</span>' +
+            'Favoritos</a></li>' +
+          '<li><a href="carrinho.html"><span class="icone-cat">' + icone('sacola', 18) + '</span>' +
+            'Carrinho</a></li>' +
+        '</ul>' +
+        '<p class="menu-secao">Ajuda</p>' +
+        '<ul class="menu-lista-mobile">' +
+          '<li><a href="institucional.html?p=atendimento"><span class="icone-cat">' +
+            icone('chat', 18) + '</span>Central de atendimento</a></li>' +
+          '<li><a href="institucional.html?p=entregas"><span class="icone-cat">' +
+            icone('caminhao', 18) + '</span>Prazos e entregas</a></li>' +
+        '</ul>' +
+      '</div>';
+    documento.body.appendChild(menu);
+  }
+
+  function abrirMenu() {
+    montarMenuMobile();
+    documento.getElementById('gaveta-menu').classList.add('aberta');
+    documento.getElementById('gaveta-menu').setAttribute('aria-hidden', 'false');
+    documento.getElementById('cortina').classList.add('aberta');
+  }
+
+  function fecharMenu() {
+    var m = documento.getElementById('gaveta-menu');
+    if (m) { m.classList.remove('aberta'); m.setAttribute('aria-hidden', 'true'); }
+    var c = documento.getElementById('cortina');
+    if (c && !documento.querySelector('.gaveta.aberta')) c.classList.remove('aberta');
+  }
+
+  /* ------------------------------------------------------------ cabeçalho fixo */
+  /* O cabeçalho encolhe depois que a pessoa desce um pouco, devolvendo à página
+     a altura da régua de categorias.
+
+     A decisão usa só a posição da rolagem, com uma faixa morta entre 120 e
+     220px. Decidir pela direção do movimento não funciona aqui: encolher o
+     cabeçalho reduz a altura do documento, o navegador dispara novos eventos de
+     rolagem por causa disso, e a direção aparente se inverte — o estado fica
+     piscando. Com histerese, o resultado depende apenas de onde a página está. */
+  function ligarCabecalhoFixo() {
+    var barra = documento.querySelector('.cabecalho');
+    if (!barra) return;
+
+    var ENCOLHE_EM = 220;
+    var EXPANDE_EM = 120;
+
+    function medir() {
+      documento.documentElement.style.setProperty('--topo-fixo', barra.offsetHeight + 'px');
+    }
+
+    var compacto = false;
+    var agendado = false;
+
+    function aoRolar() {
+      agendado = false;
+      var y = janela.scrollY;
+
+      if (!compacto && y > ENCOLHE_EM) compacto = true;
+      else if (compacto && y < EXPANDE_EM) compacto = false;
+      else return;
+
+      barra.classList.toggle('cabecalho--compacto', compacto);
+      medir();
+    }
+
+    janela.addEventListener('scroll', function () {
+      if (agendado) return;
+      agendado = true;
+      janela.requestAnimationFrame(aoRolar);
+    }, { passive: true });
+
+    /* a altura só é final quando a transição termina */
+    barra.addEventListener('transitionend', function (e) {
+      if (e.propertyName === 'padding-top' || e.propertyName === 'height') medir();
+    });
+
+    janela.addEventListener('resize', medir);
+    medir();
+  }
+
   function abrirGaveta() {
     montarGaveta();
     documento.getElementById('gaveta-carrinho').classList.add('aberta');
@@ -488,9 +640,9 @@
 
   function fecharGaveta() {
     var g = documento.getElementById('gaveta-carrinho');
-    var c = documento.getElementById('cortina');
     if (g) { g.classList.remove('aberta'); g.setAttribute('aria-hidden', 'true'); }
-    if (c) c.classList.remove('aberta');
+    var c = documento.getElementById('cortina');
+    if (c && !documento.querySelector('.gaveta.aberta')) c.classList.remove('aberta');
   }
 
   /* ------------------------------------------------------------ contadores */
@@ -530,14 +682,29 @@
             '<p>Rede de farmácias com atendimento farmacêutico presencial e online. ' +
             'Medicamentos, dermocosméticos e cuidado diário com entrega em todo o Brasil.</p>' +
             '<div class="redes">' +
-              '<a href="#" aria-label="Nosso perfil em redes sociais">' + icone('camera', 16) + '</a>' +
-              '<a href="#" aria-label="Nosso blog">' + icone('globo', 16) + '</a>' +
-              '<a href="#" aria-label="Atendimento por mensagem">' + icone('chat', 16) + '</a>' +
+              '<a href="institucional.html?p=quem-somos" aria-label="Conheça a Bem Viver">' +
+                icone('camera', 16) + '</a>' +
+              '<a href="institucional.html?p=lojas" aria-label="Nossas lojas">' +
+                icone('globo', 16) + '</a>' +
+              '<a href="institucional.html?p=atendimento" aria-label="Fale conosco">' +
+                icone('chat', 16) + '</a>' +
             '</div>' +
           '</div>' +
-          coluna('Institucional', [['Quem somos', '#'], ['Nossas lojas', '#'], ['Trabalhe conosco', '#'], ['Imprensa', '#']]) +
-          coluna('Ajuda', [['Central de atendimento', '#'], ['Prazos e entregas', '#'], ['Trocas e devoluções', '#'], ['Perguntas frequentes', '#']]) +
-          coluna('Políticas', [['Política de privacidade', '#'], ['Termos de uso', '#'], ['Política de cookies', '#'], ['Portal do titular (LGPD)', '#']]) +
+          coluna('Institucional', [
+            ['Quem somos', 'institucional.html?p=quem-somos'],
+            ['Nossas lojas', 'institucional.html?p=lojas'],
+            ['Trabalhe conosco', 'institucional.html?p=trabalhe-conosco'],
+            ['Clube Bem Viver', 'institucional.html?p=clube']]) +
+          coluna('Ajuda', [
+            ['Central de atendimento', 'institucional.html?p=atendimento'],
+            ['Prazos e entregas', 'institucional.html?p=entregas'],
+            ['Trocas e devoluções', 'institucional.html?p=trocas'],
+            ['Perguntas frequentes', 'institucional.html?p=faq']]) +
+          coluna('Políticas', [
+            ['Política de privacidade', 'institucional.html?p=privacidade'],
+            ['Termos de uso', 'institucional.html?p=termos'],
+            ['Política de cookies', 'institucional.html?p=cookies'],
+            ['Portal do titular (LGPD)', 'institucional.html?p=lgpd']]) +
           '<div><h3>Formas de pagamento</h3><div class="pagamentos">' +
             ['PIX', 'VISA', 'MASTER', 'ELO', 'AMEX', 'HIPER', 'BOLETO'].map(function (m) {
               return '<span class="pagamento">' + m + '</span>';
@@ -580,6 +747,8 @@
 
       if (e.target.closest('[data-abrir-carrinho]')) { abrirGaveta(); return; }
       if (e.target.closest('[data-fechar-carrinho]')) { fecharGaveta(); return; }
+      if (e.target.closest('[data-abrir-menu]')) { abrirMenu(); return; }
+      if (e.target.closest('[data-fechar-menu]')) { fecharMenu(); return; }
 
       var rolar = e.target.closest('[data-rolar]');
       if (rolar) {
@@ -604,6 +773,7 @@
     montarGaveta();
     fecharGaveta();
     ligarEventosGlobais();
+    ligarCabecalhoFixo();
   }
 
   janela.Loja = {
@@ -614,6 +784,9 @@
     adicionar: adicionar, alterarQtd: alterarQtd, remover: remover, esvaziar: esvaziar,
     itensCarrinho: itensCarrinho, totalItens: totalItens, subtotal: subtotal,
     abrirGaveta: abrirGaveta, fecharGaveta: fecharGaveta,
+    clienteLogado: clienteLogado, entrar: entrar, sair: sair, saudacao: saudacao,
+    pedidos: pedidos, salvarPedido: salvarPedido, novoNumeroPedido: novoNumeroPedido,
+    enderecos: enderecos, salvarEndereco: salvarEndereco,
     ehFavorito: ehFavorito, alternarFavorito: alternarFavorito,
     registrarVisto: registrarVisto, vistosRecentemente: vistosRecentemente,
     calcularFrete: calcularFrete, mascaraCep: mascaraCep,

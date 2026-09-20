@@ -192,8 +192,8 @@
       '<p class="compra__parcelas" style="margin:0 0 12px">ou ' + parc.vezes + 'x de ' +
         L.moeda(parc.valor) + ' sem juros</p>' +
 
-      '<button class="btn btn--compra btn--bloco" type="button" data-finalizar>' +
-        L.icone('escudo', 17) + ' Finalizar compra</button>' +
+      '<a class="btn btn--compra btn--bloco" href="checkout.html">' +
+        L.icone('escudo', 17) + ' Finalizar compra</a>' +
 
       '<div class="seguranca" style="margin-top:14px">' +
         '<div>' + L.icone('escudo', 15) + ' Ambiente seguro e dados criptografados</div>' +
@@ -321,7 +321,7 @@
       if (e.target.closest('[data-cupom]')) {
         var campo = documento.getElementById('cupom');
         var codigo = campo.value.trim().toUpperCase();
-        if (!codigo) { cupomAtivo = null; desenharResumo(); return; }
+        if (!codigo) { cupomAtivo = null; L.guardar('bv:cupom', null); desenharResumo(); return; }
 
         var regra = CFG.cupons[codigo];
         if (!regra) { L.aviso('Cupom inválido ou expirado.', 'erro'); return; }
@@ -330,6 +330,7 @@
           return;
         }
         cupomAtivo = { codigo: codigo, tipo: regra.tipo, valor: regra.valor };
+        L.guardar('bv:cupom', codigo);
         L.aviso('Cupom aplicado: ' + regra.descricao + '.', 'ok');
         desenharResumo();
       }
