@@ -76,53 +76,49 @@
 
     'lojas': {
       titulo: 'Nossas lojas',
-      resumo: CFG.totalLojas + ' unidades em ' + CFG.cidades.length + ' cidades do interior paulista.',
-      corpo:
-        '<div class="filtro-cidades">' +
-          '<button class="ficha-ativa" type="button" data-cidade="" aria-pressed="true">Todas</button>' +
-          CFG.cidades.map(function (c) {
-            return '<button class="ficha-ativa" type="button" data-cidade="' + L.escapar(c) +
-              '" aria-pressed="false">' + L.escapar(c) + '</button>';
-          }).join('') +
-        '</div>' +
-        '<div class="grade-lojas" id="grade-lojas">' + D.lojas.map(function (l) {
-          return '<article class="cartao-loja" data-cidade-loja="' + L.escapar(l.cidade) + '">' +
-            '<h2>' + L.escapar(l.nome) + (l.numero ? ' <small style="font-weight:600;color:var(--tinta-500)">' +
-              L.escapar(l.numero) + '</small>' : '') + '</h2>' +
-            '<p class="cartao-loja__linha">' + L.icone('local', 15) + ' ' +
-              L.escapar(l.cidade + '/' + l.uf) + '</p>' +
-            '<p class="cartao-loja__linha">' + L.icone('relogio', 15) +
-              ' <span class="pendente">horário a confirmar</span></p>' +
-            '<p class="cartao-loja__linha">' + L.icone('chat', 15) +
-              ' <span class="pendente">telefone a confirmar</span></p>' +
-            '<a class="btn btn--contorno" href="institucional.html?p=servicos">Serviços da unidade</a>' +
-          '</article>';
-        }).join('') + '</div>' +
-        '<div class="aviso-legal"><strong>Lista parcial nesta demonstração</strong>' +
-        'Estão aqui as ' + D.lojas.length + ' unidades que localizamos em fontes públicas, das ' +
-        CFG.totalLojas + ' da rede. Endereços, telefones e horários entram com a lista oficial — ' +
-        'não foram preenchidos para não publicar informação inventada no nome da Drogaria São Carlos.</div>'
-    },
+      resumo: D.lojas.length + ' unidades em ' + CFG.cidades.length + ' cidades do interior paulista.',
+      corpo: (function () {
+        var porCidade = {};
+        D.lojas.forEach(function (l) { porCidade[l.cidade] = (porCidade[l.cidade] || 0) + 1; });
+        var plantao = D.lojas.filter(function (l) { return l.plantao; });
 
-    'trabalhe-conosco': {
-      titulo: 'Trabalhe conosco',
-      resumo: 'Vagas abertas para o time de loja, logística e tecnologia.',
-      corpo:
-        '<p>Procuramos gente que goste de atender bem e que leve a sério o papel de uma farmácia no bairro. ' +
-        'Todas as vagas são registradas em CLT, com vale-refeição, plano de saúde e desconto em compras.</p>' +
-        '<h2>Vagas abertas</h2>' +
-        '<div class="grade-lojas">' +
-          [['Farmacêutico(a) responsável', 'São Paulo/SP — presencial', 'CRF ativo e disponibilidade para escala 6x1'],
-           ['Atendente de loja', 'Belo Horizonte/MG — presencial', 'Ensino médio completo; experiência com varejo é diferencial'],
-           ['Analista de logística', 'São Paulo/SP — híbrido', 'Experiência com roteirização e last mile'],
-           ['Pessoa desenvolvedora front-end', 'Remoto', 'JavaScript, acessibilidade e atenção a detalhe visual']
-          ].map(function (v) {
-            return '<article class="cartao-loja"><h2>' + v[0] + '</h2>' +
-              '<p class="cartao-loja__linha">' + L.icone('local', 15) + ' ' + v[1] + '</p>' +
-              '<p>' + v[2] + '</p>' +
-              '<a class="btn btn--contorno" href="institucional.html?p=atendimento">Quero me candidatar</a></article>';
-          }).join('') +
-        '</div>'
+        return '<div class="filtro-cidades">' +
+            '<button class="ficha-ativa" type="button" data-cidade="" aria-pressed="true">' +
+              'Todas <span class="contagem">' + D.lojas.length + '</span></button>' +
+            CFG.cidades.map(function (c) {
+              return '<button class="ficha-ativa" type="button" data-cidade="' + L.escapar(c) +
+                '" aria-pressed="false">' + L.escapar(c) +
+                ' <span class="contagem">' + (porCidade[c] || 0) + '</span></button>';
+            }).join('') +
+          '</div>' +
+
+          (plantao.length
+            ? '<p class="dica" style="margin-bottom:16px">' + L.icone('relogio', 14) + ' <strong>' +
+              plantao.length + ' unidades abrem 24 horas:</strong> ' +
+              plantao.map(function (l) { return L.escapar(l.nome + ' (' + l.cidade + ')'); }).join(' e ') +
+              '.</p>'
+            : '') +
+
+          '<div class="grade-lojas" id="grade-lojas">' + D.lojas.map(function (l) {
+            var busca = encodeURIComponent(l.endereco + ', ' + l.cidade + ' - ' + l.uf);
+            return '<article class="cartao-loja" data-cidade-loja="' + L.escapar(l.cidade) + '">' +
+              '<h2>' + L.escapar(l.nome) +
+                (l.numero ? ' <small style="font-weight:600;color:var(--tinta-500)">' +
+                  L.escapar(l.numero) + '</small>' : '') + '</h2>' +
+              (l.plantao ? '<span class="selo selo--oferta" style="align-self:flex-start">24 horas</span>' : '') +
+              '<p class="cartao-loja__linha">' + L.icone('local', 15) + ' ' +
+                L.escapar(l.endereco) + ' — ' + L.escapar(l.cidade + '/' + l.uf) + '</p>' +
+              '<p class="cartao-loja__linha">' + L.icone('relogio', 15) + ' ' +
+                L.escapar(l.horario) + '</p>' +
+              (l.telefone
+                ? '<p class="cartao-loja__linha">' + L.icone('chat', 15) + ' ' +
+                  L.escapar(l.telefone) + '</p>'
+                : '') +
+              '<a class="btn btn--contorno" href="https://www.google.com/maps/search/?api=1&query=' +
+                busca + '" rel="noopener">Como chegar</a>' +
+            '</article>';
+          }).join('') + '</div>';
+      })()
     },
 
     'servicos': {

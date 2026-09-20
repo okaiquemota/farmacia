@@ -92,6 +92,10 @@ ul { margin: 0; padding-left: 1.15rem; }
 
 .oculto { display: none !important; }
 
+/* o atributo hidden perde para qualquer regra de display do autor (display:grid
+   num cartão, por exemplo); esta linha faz o atributo valer em todo o site */
+[hidden] { display: none !important; }
+
 .so-leitor {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
@@ -851,6 +855,11 @@ ul { margin: 0; padding-left: 1.15rem; }
 
 /* ------------------------------------------------------------ rede São Carlos */
 .filtro-cidades { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s4); }
+.filtro-cidades .contagem {
+  background: rgba(0,0,0,.08); border-radius: var(--r-full);
+  padding: 1px 7px; font-size: 11.5px; margin-left: 3px;
+}
+.filtro-cidades button[aria-pressed="true"] .contagem { background: rgba(255,255,255,.22); }
 .filtro-cidades button[aria-pressed="true"] { background: var(--marca-700); color: #fff; border-color: var(--marca-700); }
 
 .servico-icone {

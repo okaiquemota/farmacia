@@ -726,8 +726,7 @@
 
         '<div class="rodape__legal"><div class="container">' +
           '<p><strong>Farmacêutico(a) responsável:</strong> ' + escapar(CFG.farmaceutico) + '</p>' +
-          '<p>' + escapar(CFG.nomeLoja) + ' Comércio de Medicamentos Ltda. — CNPJ ' + CFG.cnpj +
-          ' — Rua das Acácias, 1.200, São Paulo/SP</p>' +
+          '<p>' + escapar(CFG.razaoSocial) + ' — CNPJ ' + CFG.cnpj + ' — ' + CFG.enderecoSede + '</p>' +
           '<p class="miudos">Medicamentos isentos de prescrição: ao persistirem os sintomas, o médico ' +
           'deverá ser consultado. Leia a bula. Suplementos alimentares não substituem uma alimentação ' +
           'equilibrada e seu consumo deve estar associado a hábitos saudáveis. Preços e estoques ' +

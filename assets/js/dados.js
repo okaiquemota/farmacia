@@ -534,20 +534,34 @@
     whatsapp: '(16) 4042-0778',
     whatsappLink: 'https://wa.me/551640420778',
 
+    razaoSocial: 'Razão social A CONFIRMAR',
+    enderecoSede: 'endereço da sede A CONFIRMAR',
     farmaceutico: 'Farmacêutico(a) responsável A CONFIRMAR — CRF-SP a confirmar',
     cnpj: 'A CONFIRMAR',
     telefone: '(16) 4042-0778'
   };
 
-  /* Unidades citadas publicamente pela rede. Endereço e telefone de cada uma
-     ficam em branco de propósito — entram com a lista oficial das 17 lojas. */
+  /* As 17 unidades da rede, com endereço, horário e telefone conforme o site
+     oficial. A loja Jardim Oliveira não publica telefone lá; o campo fica
+     vazio de propósito em vez de receber um número inventado. */
   var LOJAS = [
-    { nome: 'Parque Ribeirão Preto', numero: 'Loja 02', cidade: 'Ribeirão Preto', uf: 'SP' },
-    { nome: 'Garibaldi', numero: 'Loja 04', cidade: 'Ribeirão Preto', uf: 'SP' },
-    { nome: 'Jardim Paulista', numero: 'Loja 09', cidade: 'Ribeirão Preto', uf: 'SP' },
-    { nome: 'Planalto Verde', numero: 'Loja 16', cidade: 'Ribeirão Preto', uf: 'SP' },
-    { nome: 'Ribeirão Verde', numero: '', cidade: 'Ribeirão Preto', uf: 'SP' },
-    { nome: 'Jardim Cristo Redentor', numero: 'Nova 02', cidade: 'Ribeirão Preto', uf: 'SP' }
+    { nome: 'Bonfim Paulista', numero: 'Loja 08', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Via Doutor Luiz Carlos Bianchi, 2995', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Garibaldi', numero: 'Loja 04', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Garibaldi, 941', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Cristo Redentor', numero: 'Nova 02', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Maximilliam Maggioni, 320', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Paulista', numero: 'Loja 09', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Henrique Dumont, 736', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Roberto Benedetti', numero: 'Loja 10', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Thereza Moreira Pastori, 56', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim das Palmeiras', numero: 'Loja 15', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Henry Nestlé, 1400', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Lagoinha', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Niterói, 886', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Parque Ribeirão Preto', numero: 'Loja 02', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Luzitana, 824', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Parque São Sebastião', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Heron Domingues, 654', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Planalto Verde', numero: 'Loja 16', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Sérgio Achê, 911', horario: 'Aberta 24 horas', telefone: '(16) 4042-0778', plantao: true },
+    { nome: 'Ribeirão Verde', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Emygidio Rosseto, 2537', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Saudade', numero: 'Loja 07', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Saudade, 969', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Rui Barbosa', numero: '', cidade: 'Matão', uf: 'SP', endereco: 'Rua Rui Barbosa, 980', horario: 'Diariamente das 7h às 23h', telefone: '(16) 3384-6607' },
+    { nome: 'XV de Novembro', numero: '', cidade: 'Matão', uf: 'SP', endereco: 'Av. XV de Novembro, 986', horario: 'Diariamente das 7h às 23h', telefone: '(16) 3384-9300' },
+    { nome: '24 Horas', numero: '', cidade: 'Pirassununga', uf: 'SP', endereco: 'Rua Duque de Caxias, 1446', horario: '24 horas', telefone: '(19) 3561-3010', plantao: true },
+    { nome: 'Centro', numero: '', cidade: 'Pirassununga', uf: 'SP', endereco: 'Rua Duque de Caxias, 1306', horario: 'Diariamente das 7h às 23h', telefone: '(19) 3561-9266' },
+    { nome: 'Jardim Oliveira', numero: 'Loja 13', cidade: 'Jardinópolis', uf: 'SP', endereco: 'Av. Belarmino Pereira de Oliveira, 483', horario: 'Diariamente das 7h às 23h', telefone: '' }
   ];
 
   /* Serviços farmacêuticos que a rede divulga prestar nas lojas */
