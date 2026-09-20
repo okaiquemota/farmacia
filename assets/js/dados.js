@@ -36,7 +36,6 @@
       qtdAvaliacoes: 213,
       estoque: 18,
       destaque: true,
-      lancamento: false,
       tags: ['Mais vendido'],
       resumo: 'Creme de pentear sem enxágue que devolve maciez e controle aos fios ' +
               'ressecados por química, calor ou sol. Textura leve, não pesa e facilita ' +
@@ -249,7 +248,7 @@
       sku: 'MED-DIP-500',
       slug: 'dipirona-monoidratada-500mg-20-comprimidos',
       nome: 'Dipirona Monoidratada 500mg 20 Comprimidos — Genérico',
-      marca: 'Genérico Bem Viver', linha: 'Genéricos', categoria: 'medicamentos',
+      marca: 'Genérico São Carlos', linha: 'Genéricos', categoria: 'medicamentos',
       subcategoria: 'Analgésicos e antitérmicos',
       preco: 12.49, precoDe: 18.9, precoClube: 10.62,
       imagem: 'med-dipirona.svg', galeria: ['med-dipirona.svg'],
@@ -283,7 +282,7 @@
       sku: 'MED-IBU-400',
       slug: 'ibuprofeno-400mg-20-comprimidos',
       nome: 'Ibuprofeno 400mg 20 Comprimidos Revestidos — Genérico',
-      marca: 'Genérico Bem Viver', linha: 'Genéricos', categoria: 'medicamentos',
+      marca: 'Genérico São Carlos', linha: 'Genéricos', categoria: 'medicamentos',
       subcategoria: 'Anti-inflamatórios',
       preco: 18.9, precoDe: 26.5, precoClube: 16.07,
       imagem: 'med-ibuprofeno.svg', galeria: ['med-ibuprofeno.svg'],
@@ -465,22 +464,25 @@
   /* --------------------------------------------------------------------- */
   var BANNERS = [
     {
-      imagem: 'banner-1.svg', etiqueta: 'Clube Bem Viver',
-      titulo: 'Até 15% de desconto em toda a loja, todos os dias',
-      texto: 'Assine grátis e acumule pontos que viram desconto na próxima compra.',
-      cta: 'Conhecer o Clube', href: '#clube'
+      imagem: 'banner-1.svg', etiqueta: 'Desde 1973',
+      titulo: 'Agora a sua drogaria de sempre também é online',
+      texto: '17 lojas em Ribeirão Preto, Matão, Pirassununga e Jardinópolis — e o mesmo ' +
+             'atendimento, agora a qualquer hora.',
+      cta: 'Ver as lojas', href: 'institucional.html?p=lojas'
     },
     {
-      imagem: 'banner-2.svg', etiqueta: 'Semana da beleza',
-      titulo: 'Cabelos e dermocosméticos com até 30% OFF',
-      texto: 'Seleção de tratamentos capilares e cuidados com a pele com preços especiais.',
-      cta: 'Ver ofertas', href: 'categoria.html?cat=dermo'
+      imagem: 'banner-2.svg', etiqueta: 'Ofertas',
+      titulo: 'Genéricos e dermocosméticos com até 30% OFF',
+      texto: 'Mais de 3.000 medicamentos de marca e genéricos, com preço de clube à vista ' +
+             'em todas as páginas.',
+      cta: 'Ver ofertas', href: 'categoria.html?cat=ofertas'
     },
     {
-      imagem: 'banner-3.svg', etiqueta: 'Entrega rápida',
-      titulo: 'Receba em até 2 horas na sua casa',
-      texto: 'Disponível para capitais e regiões metropolitanas. Consulte pelo CEP.',
-      cta: 'Ver produtos', href: 'categoria.html'
+      imagem: 'banner-3.svg', etiqueta: 'Disk Entrega',
+      titulo: 'Peça pelo site ou pelo WhatsApp e receba em casa',
+      texto: 'Entrega em até 2 horas nas cidades da rede, ou retirada gratuita em qualquer ' +
+             'uma das 17 lojas.',
+      cta: 'Comprar agora', href: 'categoria.html'
     }
   ];
 
@@ -501,22 +503,138 @@
     { faixa: [90000000, 99999999], uf: 'RS', nome: 'Rio Grande do Sul', base: 23.9, prazo: 5, expresso: false }
   ];
 
+  /* -----------------------------------------------------------------------
+     Dados da rede.
+
+     Os campos marcados como A CONFIRMAR são espaços reservados: não temos a
+     informação oficial e ela não pode ser inventada num material que leva o
+     nome da rede. Substituir antes de qualquer publicação.
+     ----------------------------------------------------------------------- */
   var CONFIG = {
-    nomeLoja: 'Drogaria Bem Viver',
+    nomeLoja: 'Drogaria São Carlos',
+    fundacao: 1973,
+    fundador: 'Ildefonso Henrique Knup',
+    totalLojas: 17,
+    cidades: ['Ribeirão Preto', 'Matão', 'Pirassununga', 'Jardinópolis'],
+
     freteGratisAcima: 99,
     descontoPix: 0.05,
     parcelasMax: 6,
     parcelaMinima: 20,
     descontoClube: 0.15,
+
     cupons: {
-      BEMVIVER10: { tipo: 'percentual', valor: 0.10, descricao: '10% de desconto' },
+      SAOCARLOS10: { tipo: 'percentual', valor: 0.10, descricao: '10% de desconto' },
       PRIMEIRA20: { tipo: 'percentual', valor: 0.20, descricao: '20% na primeira compra', minimo: 120 },
       FRETEGRATIS: { tipo: 'frete', valor: 1, descricao: 'frete grátis' }
     },
-    farmaceutico: 'Dra. Helena Marques Prado — CRF-SP 00.000',
-    cnpj: '00.000.000/0001-00',
-    telefone: '0800 000 0000'
+
+    /* Disk Entrega divulgado pela rede, exclusivo de Ribeirão Preto */
+    whatsapp: '(16) 4042-0778',
+    whatsappLink: 'https://wa.me/551640420778',
+
+    /* Preencher para o catálogo passar a vir do banco em vez deste arquivo.
+       A chave publicável (anon) é pública por natureza: o que protege os
+       dados é o RLS do schema, não o segredo da chave. */
+    supabase: { url: '', chave: '', schema: 'farmacia' },
+
+    razaoSocial: 'Razão social A CONFIRMAR',
+    enderecoSede: 'endereço da sede A CONFIRMAR',
+    farmaceutico: 'Farmacêutico(a) responsável A CONFIRMAR — CRF-SP a confirmar',
+    cnpj: 'A CONFIRMAR',
+    telefone: '(16) 4042-0778'
   };
+
+  /* As 17 unidades da rede, com endereço, horário e telefone conforme o site
+     oficial. A loja Jardim Oliveira não publica telefone lá; o campo fica
+     vazio de propósito em vez de receber um número inventado. */
+  var LOJAS = [
+    { nome: 'Bonfim Paulista', numero: 'Loja 08', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Via Doutor Luiz Carlos Bianchi, 2995', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Garibaldi', numero: 'Loja 04', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Garibaldi, 941', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Cristo Redentor', numero: 'Nova 02', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Maximilliam Maggioni, 320', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Paulista', numero: 'Loja 09', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Henrique Dumont, 736', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim Roberto Benedetti', numero: 'Loja 10', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Thereza Moreira Pastori, 56', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Jardim das Palmeiras', numero: 'Loja 15', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Henry Nestlé, 1400', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Lagoinha', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Niterói, 886', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Parque Ribeirão Preto', numero: 'Loja 02', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Luzitana, 824', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Parque São Sebastião', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Heron Domingues, 654', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Planalto Verde', numero: 'Loja 16', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Sérgio Achê, 911', horario: 'Aberta 24 horas', telefone: '(16) 4042-0778', plantao: true },
+    { nome: 'Ribeirão Verde', numero: '', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Rua Emygidio Rosseto, 2537', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Saudade', numero: 'Loja 07', cidade: 'Ribeirão Preto', uf: 'SP', endereco: 'Av. Saudade, 969', horario: 'Diariamente das 7h às 23h', telefone: '(16) 4042-0778' },
+    { nome: 'Rui Barbosa', numero: '', cidade: 'Matão', uf: 'SP', endereco: 'Rua Rui Barbosa, 980', horario: 'Diariamente das 7h às 23h', telefone: '(16) 3384-6607' },
+    { nome: 'XV de Novembro', numero: '', cidade: 'Matão', uf: 'SP', endereco: 'Av. XV de Novembro, 986', horario: 'Diariamente das 7h às 23h', telefone: '(16) 3384-9300' },
+    { nome: '24 Horas', numero: '', cidade: 'Pirassununga', uf: 'SP', endereco: 'Rua Duque de Caxias, 1446', horario: '24 horas', telefone: '(19) 3561-3010', plantao: true },
+    { nome: 'Centro', numero: '', cidade: 'Pirassununga', uf: 'SP', endereco: 'Rua Duque de Caxias, 1306', horario: 'Diariamente das 7h às 23h', telefone: '(19) 3561-9266' },
+    { nome: 'Jardim Oliveira', numero: 'Loja 13', cidade: 'Jardinópolis', uf: 'SP', endereco: 'Av. Belarmino Pereira de Oliveira, 483', horario: 'Diariamente das 7h às 23h', telefone: '' }
+  ];
+
+  /* Os nove serviços que a rede presta nas lojas. Descrições escritas para
+     este protótipo a partir do que cada serviço é. */
+  var SERVICOS = [
+    {
+      id: 'farmacia-popular', icone: 'escudo', titulo: 'Farmácia Popular',
+      resumo: 'Medicamentos gratuitos ou com desconto pelo programa do Ministério da Saúde.',
+      texto: 'A rede é credenciada ao programa e trabalha com os principais laboratórios nele ' +
+             'incluídos. São gratuitos os medicamentos para hipertensão, diabetes e asma, e têm ' +
+             'desconto os de dislipidemia, osteoporose, rinite, glaucoma, doença de Parkinson e ' +
+             'anticoncepcionais. Leve documento com foto, CPF e a receita dentro da validade.'
+    },
+    {
+      id: 'injecoes', icone: 'escudo', titulo: 'Injeções',
+      resumo: 'Aplicação de injetáveis em sala apropriada, por profissional qualificado.',
+      texto: 'As lojas têm local reservado e equipe habilitada para aplicar medicamentos ' +
+             'injetáveis. Traga a receita e o medicamento. Consulte a unidade mais próxima ' +
+             'para confirmar os horários em que o serviço está disponível.'
+    },
+    {
+      id: 'afericoes', icone: 'relogio', titulo: 'Aferições',
+      resumo: 'Medição de pressão arterial e de glicose com equipe especializada.',
+      texto: 'Acompanhamento de rotina para quem controla pressão ou diabetes, feito por equipe ' +
+             'treinada. É um serviço de acompanhamento: não substitui consulta médica nem exame ' +
+             'laboratorial.'
+    },
+    {
+      id: 'pbm', icone: 'medicamentos', titulo: 'PBM',
+      resumo: 'Mais de 3.000 medicamentos de marca e genéricos com desconto de laboratório.',
+      texto: 'Os Programas de Benefício em Medicamentos aplicam o desconto do próprio ' +
+             'laboratório direto no balcão, mediante cadastro e apresentação da receita. ' +
+             'A rede trabalha com mais de 3.000 medicamentos de marca e genéricos para os ' +
+             'mais variados tratamentos.'
+    },
+    {
+      id: 'convenios', icone: 'cartao', titulo: 'Convênios',
+      resumo: 'Descontos por convênio particular ou empresarial.',
+      texto: 'Empresas e entidades conveniadas garantem desconto a funcionários e associados, ' +
+             'com compra identificada e desconto em folha quando o convênio prevê. ' +
+             'Consulte se o seu convênio já é atendido pela rede.'
+    },
+    {
+      id: 'plantao', icone: 'relogio', titulo: 'Atendimento 24 horas',
+      resumo: 'Duas unidades de plantão, para quando a necessidade não espera.',
+      texto: 'Planalto Verde, em Ribeirão Preto, e a unidade 24 Horas, em Pirassununga, ' +
+             'atendem em regime de plantão, todos os dias. As demais lojas funcionam ' +
+             'diariamente das 7h às 23h.'
+    },
+    {
+      id: 'entrega', icone: 'caminhao', titulo: 'Disk Entrega',
+      resumo: 'Medicamentos e perfumaria entregues em casa, pedidos pelo WhatsApp.',
+      texto: 'Hoje o pedido é feito por telefone ou WhatsApp e passa por um atendente. ' +
+             'Com a loja online, o mesmo pedido pode ser fechado pelo próprio cliente, a ' +
+             'qualquer hora, com o frete calculado pelo CEP e sem ocupar ninguém no balcão.'
+    },
+    {
+      id: 'recarga', icone: 'celular', titulo: 'Recarga de celular',
+      resumo: 'Recarga das principais operadoras, na hora.',
+      texto: 'Recarga de crédito pré-pago das principais operadoras de telefonia móvel, ' +
+             'feita no caixa em poucos segundos.'
+    },
+    {
+      id: 'estacionamento', icone: 'carro', titulo: 'Estacionamento próprio',
+      resumo: 'Todas as lojas da rede têm estacionamento para clientes.',
+      texto: 'Todas as unidades contam com estacionamento próprio, o que facilita a compra ' +
+             'de volume e a retirada de pedidos feitos pelo site.'
+    }
+  ];
 
   janela.LojaDados = {
     categorias: CATEGORIAS,
@@ -524,6 +642,8 @@
     banners: BANNERS,
     regioes: REGIOES,
     config: CONFIG,
+    lojas: LOJAS,
+    servicos: SERVICOS,
     porSku: function (sku) {
       for (var i = 0; i < PRODUTOS.length; i++) {
         if (PRODUTOS[i].sku === sku) return PRODUTOS[i];

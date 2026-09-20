@@ -31,6 +31,10 @@
     chat: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/>',
     pix: '<path d="m12 3 4 4-4 4-4-4 4-4Z"/><path d="m12 13 4 4-4 4-4-4 4-4Z"/><path d="m3 12 4-4 4 4-4 4-4-4Z"/><path d="m13 12 4-4 4 4-4 4-4-4Z"/>',
     menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
+    celular: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
+    carro: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4"/><path d="M3 17h18v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2M7 20v-1"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/>',
+    zap: '<path d="M21 11.6a8.5 8.5 0 0 1-12.6 7.5L3 21l1.9-5.3A8.5 8.5 0 1 1 21 11.6Z"/>' +
+         '<path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l-.9 1.3a1.3 1.3 0 0 1-1.5.4 9.4 9.4 0 0 1-5.3-5.3 1.3 1.3 0 0 1 .4-1.5z" fill="currentColor" stroke="none"/>',
     camera: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
     globo: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15 0 18-2.5-3-2.5-15.4 0-18Z"/>',
     cabelos: '<path d="M12 3a7 7 0 0 0-7 7v11h3v-8a4 4 0 0 1 8 0v8h3V10a7 7 0 0 0-7-7Z"/>',
@@ -126,11 +130,49 @@
   }
 
   /* ------------------------------------------------------------ carrinho */
-  var CHAVE_CARRINHO = 'bv:carrinho';
-  var CHAVE_FAVORITOS = 'bv:favoritos';
-  var CHAVE_VISTOS = 'bv:vistos';
-  var CHAVE_CEP = 'bv:cep';
-  var CHAVE_AVALIACOES = 'bv:avaliacoes';
+  var CHAVE_CARRINHO = 'dsc:carrinho';
+  var CHAVE_FAVORITOS = 'dsc:favoritos';
+  var CHAVE_VISTOS = 'dsc:vistos';
+  var CHAVE_CEP = 'dsc:cep';
+  var CHAVE_AVALIACOES = 'dsc:avaliacoes';
+
+  var CHAVE_CLIENTE = 'dsc:cliente';
+  var CHAVE_PEDIDOS = 'dsc:pedidos';
+  var CHAVE_ENDERECOS = 'dsc:enderecos';
+
+  function pedidos() { return recuperar(CHAVE_PEDIDOS, []); }
+
+  function salvarPedido(pedido) {
+    var lista = pedidos();
+    lista.unshift(pedido);
+    guardar(CHAVE_PEDIDOS, lista.slice(0, 30));
+    return pedido;
+  }
+
+  function enderecos() { return recuperar(CHAVE_ENDERECOS, []); }
+
+  function salvarEndereco(end) {
+    var lista = enderecos().filter(function (e) { return e.cep !== end.cep; });
+    lista.unshift(end);
+    guardar(CHAVE_ENDERECOS, lista.slice(0, 5));
+  }
+
+  function novoNumeroPedido() {
+    return 'DSC-' + String(Math.floor(Math.random() * 900000) + 100000);
+  }
+
+  function clienteLogado() { return recuperar(CHAVE_CLIENTE, null); }
+
+  function saudacao() {
+    var c = clienteLogado();
+    return c ? 'Olá, ' + String(c.nome).split(' ')[0] : 'Olá, visitante';
+  }
+
+  function entrar(cliente) { guardar(CHAVE_CLIENTE, cliente); }
+
+  function sair() {
+    try { janela.localStorage.removeItem(CHAVE_CLIENTE); } catch (e) { /* modo privado */ }
+  }
 
   var carrinho = recuperar(CHAVE_CARRINHO, []);
   var favoritos = recuperar(CHAVE_FAVORITOS, []);
@@ -325,17 +367,24 @@
       return '<li><a href="categoria.html?cat=' + c.id + '"' +
         (paginaAtiva === c.id ? ' class="ativo"' : (c.id === 'ofertas' ? ' class="destaque"' : '')) +
         '>' + escapar(c.nome) + '</a></li>';
+    }).join('') +
+    '<li aria-hidden="true" style="width:1px;height:20px;background:var(--linha);margin:0 6px"></li>' +
+    [['servicos', 'Serviços'], ['lojas', 'Lojas'], ['quem-somos', 'Quem somos']].map(function (i) {
+      return '<li><a href="institucional.html?p=' + i[0] + '">' + i[1] + '</a></li>';
     }).join('');
 
     alvo.innerHTML = '' +
       '<div class="barra-aviso">' +
-        '<strong>Frete grátis</strong> em compras acima de ' + moeda(CFG.freteGratisAcima) +
-        ' · Entrega expressa em até 2 horas nas capitais' +
+        '<strong>Frete grátis</strong> acima de ' + moeda(CFG.freteGratisAcima) +
+        ' · Disk Entrega <a href="' + CFG.whatsappLink + '" rel="noopener">' + CFG.whatsapp + '</a>' +
+        ' · ' + CFG.totalLojas + ' lojas em ' + CFG.cidades.length + ' cidades' +
       '</div>' +
       '<div class="cabecalho">' +
         '<div class="container cabecalho__topo">' +
+          '<button class="menu-hamburguer" type="button" data-abrir-menu aria-label="Abrir menu de categorias">' +
+            icone('menu', 24) + '</button>' +
           '<a class="cabecalho__logo" href="index.html" aria-label="' + escapar(CFG.nomeLoja) + ' — página inicial">' +
-            '<img src="assets/img/logo.svg" alt="' + escapar(CFG.nomeLoja) + '" width="300" height="64">' +
+            '<img src="assets/img/Sao-Carlos-Horizontal.svg" alt="' + escapar(CFG.nomeLoja) + '">' +
           '</a>' +
           '<div class="busca">' +
             '<form class="busca__campo" role="search" action="categoria.html" method="get">' +
@@ -347,14 +396,16 @@
             '<div class="busca__sugestoes oculto" id="sugestoes" role="listbox" aria-label="Sugestões de busca"></div>' +
           '</div>' +
           '<div class="acoes">' +
-            '<a class="acao" href="#conta"><span>' + icone('usuario') + '</span>' +
-              '<span class="acao__texto"><small>Olá, visitante</small><b>Entrar</b></span></a>' +
-            '<a class="acao" href="#favoritos"><span>' + icone('coracao') + '</span>' +
-              '<span class="acao__contador" data-contador-favoritos>0</span>' +
+            '<a class="acao" href="conta.html"><span class="acao__icone">' + icone('usuario') + '</span>' +
+              '<span class="acao__texto"><small>' + escapar(saudacao()) + '</small><b>' +
+              (clienteLogado() ? 'Minha conta' : 'Entrar') + '</b></span></a>' +
+            '<a class="acao" href="favoritos.html">' +
+              '<span class="acao__icone">' + icone('coracao') +
+                '<span class="acao__contador" data-contador-favoritos>0</span></span>' +
               '<span class="acao__texto"><small>Meus</small><b>Favoritos</b></span></a>' +
             '<button class="acao" type="button" data-abrir-carrinho>' +
-              '<span>' + icone('sacola') + '</span>' +
-              '<span class="acao__contador" data-contador-carrinho>0</span>' +
+              '<span class="acao__icone">' + icone('sacola') +
+                '<span class="acao__contador" data-contador-carrinho>0</span></span>' +
               '<span class="acao__texto"><small>Meu</small><b>Carrinho</b></span></button>' +
           '</div>' +
         '</div>' +
@@ -430,9 +481,9 @@
       '<div class="gaveta__rodape" id="gaveta-rodape"></div>';
     documento.body.appendChild(gaveta);
 
-    cortina.addEventListener('click', fecharGaveta);
+    cortina.addEventListener('click', function () { fecharGaveta(); fecharMenu(); });
     documento.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') fecharGaveta();
+      if (e.key === 'Escape') { fecharGaveta(); fecharMenu(); }
     });
 
     desenharGaveta();
@@ -479,6 +530,116 @@
       '<button class="btn btn--neutro btn--bloco" type="button" data-fechar-carrinho>Continuar comprando</button>';
   }
 
+  /* ------------------------------------------------------------ menu mobile */
+  function montarMenuMobile() {
+    if (documento.getElementById('gaveta-menu')) return;
+
+    var cliente = clienteLogado();
+
+    var menu = documento.createElement('nav');
+    menu.className = 'gaveta gaveta--esq';
+    menu.id = 'gaveta-menu';
+    menu.setAttribute('aria-hidden', 'true');
+    menu.setAttribute('aria-label', 'Menu de categorias');
+    menu.innerHTML =
+      '<div class="gaveta__topo">' +
+        '<h2>' + (cliente ? escapar(saudacao()) : 'Menu') + '</h2>' +
+        '<button class="gaveta__fechar" type="button" data-fechar-menu aria-label="Fechar menu">' +
+          icone('fechar') + '</button>' +
+      '</div>' +
+      '<div class="gaveta__corpo">' +
+        '<p class="menu-secao">Categorias</p>' +
+        '<ul class="menu-lista-mobile">' +
+          D.categorias.map(function (c) {
+            return '<li><a href="categoria.html?cat=' + c.id + '">' +
+              '<span class="icone-cat">' + icone(c.icone, 18) + '</span>' +
+              escapar(c.nome) + '</a></li>';
+          }).join('') +
+        '</ul>' +
+        '<p class="menu-secao">Minha conta</p>' +
+        '<ul class="menu-lista-mobile">' +
+          '<li><a href="conta.html"><span class="icone-cat">' + icone('usuario', 18) + '</span>' +
+            (cliente ? 'Meus pedidos' : 'Entrar ou cadastrar') + '</a></li>' +
+          '<li><a href="favoritos.html"><span class="icone-cat">' + icone('coracao', 18) + '</span>' +
+            'Favoritos</a></li>' +
+          '<li><a href="carrinho.html"><span class="icone-cat">' + icone('sacola', 18) + '</span>' +
+            'Carrinho</a></li>' +
+        '</ul>' +
+        '<p class="menu-secao">Ajuda</p>' +
+        '<ul class="menu-lista-mobile">' +
+          '<li><a href="institucional.html?p=atendimento"><span class="icone-cat">' +
+            icone('chat', 18) + '</span>Central de atendimento</a></li>' +
+          '<li><a href="institucional.html?p=entregas"><span class="icone-cat">' +
+            icone('caminhao', 18) + '</span>Prazos e entregas</a></li>' +
+        '</ul>' +
+      '</div>';
+    documento.body.appendChild(menu);
+  }
+
+  function abrirMenu() {
+    montarMenuMobile();
+    documento.getElementById('gaveta-menu').classList.add('aberta');
+    documento.getElementById('gaveta-menu').setAttribute('aria-hidden', 'false');
+    documento.getElementById('cortina').classList.add('aberta');
+  }
+
+  function fecharMenu() {
+    var m = documento.getElementById('gaveta-menu');
+    if (m) { m.classList.remove('aberta'); m.setAttribute('aria-hidden', 'true'); }
+    var c = documento.getElementById('cortina');
+    if (c && !documento.querySelector('.gaveta.aberta')) c.classList.remove('aberta');
+  }
+
+  /* ------------------------------------------------------------ cabeçalho fixo */
+  /* O cabeçalho encolhe depois que a pessoa desce um pouco, devolvendo à página
+     a altura da régua de categorias.
+
+     A decisão usa só a posição da rolagem, com uma faixa morta entre 120 e
+     220px. Decidir pela direção do movimento não funciona aqui: encolher o
+     cabeçalho reduz a altura do documento, o navegador dispara novos eventos de
+     rolagem por causa disso, e a direção aparente se inverte — o estado fica
+     piscando. Com histerese, o resultado depende apenas de onde a página está. */
+  function ligarCabecalhoFixo() {
+    var barra = documento.querySelector('.cabecalho');
+    if (!barra) return;
+
+    var ENCOLHE_EM = 220;
+    var EXPANDE_EM = 120;
+
+    function medir() {
+      documento.documentElement.style.setProperty('--topo-fixo', barra.offsetHeight + 'px');
+    }
+
+    var compacto = false;
+    var agendado = false;
+
+    function aoRolar() {
+      agendado = false;
+      var y = janela.scrollY;
+
+      if (!compacto && y > ENCOLHE_EM) compacto = true;
+      else if (compacto && y < EXPANDE_EM) compacto = false;
+      else return;
+
+      barra.classList.toggle('cabecalho--compacto', compacto);
+      medir();
+    }
+
+    janela.addEventListener('scroll', function () {
+      if (agendado) return;
+      agendado = true;
+      janela.requestAnimationFrame(aoRolar);
+    }, { passive: true });
+
+    /* a altura só é final quando a transição termina */
+    barra.addEventListener('transitionend', function (e) {
+      if (e.propertyName === 'padding-top' || e.propertyName === 'height') medir();
+    });
+
+    janela.addEventListener('resize', medir);
+    medir();
+  }
+
   function abrirGaveta() {
     montarGaveta();
     documento.getElementById('gaveta-carrinho').classList.add('aberta');
@@ -488,9 +649,9 @@
 
   function fecharGaveta() {
     var g = documento.getElementById('gaveta-carrinho');
-    var c = documento.getElementById('cortina');
     if (g) { g.classList.remove('aberta'); g.setAttribute('aria-hidden', 'true'); }
-    if (c) c.classList.remove('aberta');
+    var c = documento.getElementById('cortina');
+    if (c && !documento.querySelector('.gaveta.aberta')) c.classList.remove('aberta');
   }
 
   /* ------------------------------------------------------------ contadores */
@@ -516,7 +677,7 @@
       '<div class="rodape">' +
         '<div class="rodape__newsletter"><div class="container">' +
           '<div><h2>Ofertas na sua caixa de entrada</h2>' +
-          '<p>Cadastre-se e receba cupons exclusivos do Clube Bem Viver.</p></div>' +
+          '<p>Cadastre-se e receba cupons exclusivos do Clube São Carlos.</p></div>' +
           '<form class="form-news" data-newsletter>' +
             '<label class="so-leitor" for="email-news">Seu e-mail</label>' +
             '<input id="email-news" type="email" name="email" placeholder="Digite seu melhor e-mail" required>' +
@@ -526,37 +687,56 @@
 
         '<div class="container rodape__colunas">' +
           '<div class="rodape__sobre">' +
-            '<img src="assets/img/logo-claro.svg" alt="' + escapar(CFG.nomeLoja) + '" width="300" height="64">' +
-            '<p>Rede de farmácias com atendimento farmacêutico presencial e online. ' +
-            'Medicamentos, dermocosméticos e cuidado diário com entrega em todo o Brasil.</p>' +
+            '<span class="marca-chip"><img src="assets/img/Sao-Carlos-Horizontal.svg" alt="' +
+              escapar(CFG.nomeLoja) + '"></span>' +
+            '<p>Desde ' + CFG.fundacao + ' cuidando da saúde no interior paulista. ' +
+            CFG.totalLojas + ' lojas em ' + CFG.cidades.join(', ') + ', com atendimento ' +
+            'farmacêutico, Farmácia Popular e unidades 24 horas.</p>' +
             '<div class="redes">' +
-              '<a href="#" aria-label="Nosso perfil em redes sociais">' + icone('camera', 16) + '</a>' +
-              '<a href="#" aria-label="Nosso blog">' + icone('globo', 16) + '</a>' +
-              '<a href="#" aria-label="Atendimento por mensagem">' + icone('chat', 16) + '</a>' +
+              '<a href="institucional.html?p=quem-somos" aria-label="Conheça a São Carlos">' +
+                icone('camera', 16) + '</a>' +
+              '<a href="institucional.html?p=lojas" aria-label="Nossas lojas">' +
+                icone('globo', 16) + '</a>' +
+              '<a href="institucional.html?p=atendimento" aria-label="Fale conosco">' +
+                icone('chat', 16) + '</a>' +
             '</div>' +
           '</div>' +
-          coluna('Institucional', [['Quem somos', '#'], ['Nossas lojas', '#'], ['Trabalhe conosco', '#'], ['Imprensa', '#']]) +
-          coluna('Ajuda', [['Central de atendimento', '#'], ['Prazos e entregas', '#'], ['Trocas e devoluções', '#'], ['Perguntas frequentes', '#']]) +
-          coluna('Políticas', [['Política de privacidade', '#'], ['Termos de uso', '#'], ['Política de cookies', '#'], ['Portal do titular (LGPD)', '#']]) +
+          coluna('Institucional', [
+            ['Quem somos', 'institucional.html?p=quem-somos'],
+            ['Nossas lojas', 'institucional.html?p=lojas'],
+            ['Trabalhe conosco', 'institucional.html?p=trabalhe-conosco'],
+            ['Clube São Carlos', 'institucional.html?p=clube']]) +
+          coluna('Ajuda', [
+            ['Central de atendimento', 'institucional.html?p=atendimento'],
+            ['Prazos e entregas', 'institucional.html?p=entregas'],
+            ['Trocas e devoluções', 'institucional.html?p=trocas'],
+            ['Perguntas frequentes', 'institucional.html?p=faq']]) +
+          coluna('Políticas', [
+            ['Política de privacidade', 'institucional.html?p=privacidade'],
+            ['Termos de uso', 'institucional.html?p=termos'],
+            ['Política de cookies', 'institucional.html?p=cookies'],
+            ['Portal do titular (LGPD)', 'institucional.html?p=lgpd']]) +
           '<div><h3>Formas de pagamento</h3><div class="pagamentos">' +
             ['PIX', 'VISA', 'MASTER', 'ELO', 'AMEX', 'HIPER', 'BOLETO'].map(function (m) {
               return '<span class="pagamento">' + m + '</span>';
             }).join('') +
-          '</div><h3 style="margin-top:20px">Atendimento</h3>' +
-          '<ul><li>' + CFG.telefone + '</li><li>Seg. a sex., 8h às 20h</li></ul></div>' +
+          '</div><h3 style="margin-top:20px">Disk Entrega</h3>' +
+          '<ul><li><a href="' + CFG.whatsappLink + '" rel="noopener">' + CFG.whatsapp + '</a></li>' +
+          '<li>WhatsApp exclusivo de Ribeirão Preto</li>' +
+          '<li><a href="institucional.html?p=lojas">Unidades 24 horas</a></li></ul></div>' +
         '</div>' +
 
         '<div class="rodape__legal"><div class="container">' +
           '<p><strong>Farmacêutico(a) responsável:</strong> ' + escapar(CFG.farmaceutico) + '</p>' +
-          '<p>' + escapar(CFG.nomeLoja) + ' Comércio de Medicamentos Ltda. — CNPJ ' + CFG.cnpj +
-          ' — Rua das Acácias, 1.200, São Paulo/SP</p>' +
+          '<p>' + escapar(CFG.razaoSocial) + ' — CNPJ ' + CFG.cnpj + ' — ' + CFG.enderecoSede + '</p>' +
           '<p class="miudos">Medicamentos isentos de prescrição: ao persistirem os sintomas, o médico ' +
           'deverá ser consultado. Leia a bula. Suplementos alimentares não substituem uma alimentação ' +
           'equilibrada e seu consumo deve estar associado a hábitos saudáveis. Preços e estoques ' +
           'válidos apenas para o site.</p>' +
-          '<p class="miudos"><strong>Site de demonstração.</strong> Loja, marcas, registros, preços e ' +
-          'avaliações são fictícios e foram criados apenas para exemplificar a interface. ' +
-          'Nenhuma venda é processada.</p>' +
+          '<p class="miudos"><strong>Protótipo de proposta.</strong> Esta não é a loja oficial da ' +
+          'Drogaria São Carlos. Preços, produtos, avaliações e prazos são ilustrativos, e dados ' +
+          'ainda não confirmados com a rede aparecem marcados como tal. Nenhuma venda é ' +
+          'processada e nenhum pagamento é cobrado.</p>' +
         '</div></div>' +
       '</div>';
   }
@@ -580,6 +760,8 @@
 
       if (e.target.closest('[data-abrir-carrinho]')) { abrirGaveta(); return; }
       if (e.target.closest('[data-fechar-carrinho]')) { fecharGaveta(); return; }
+      if (e.target.closest('[data-abrir-menu]')) { abrirMenu(); return; }
+      if (e.target.closest('[data-fechar-menu]')) { fecharMenu(); return; }
 
       var rolar = e.target.closest('[data-rolar]');
       if (rolar) {
@@ -604,6 +786,19 @@
     montarGaveta();
     fecharGaveta();
     ligarEventosGlobais();
+    ligarCabecalhoFixo();
+    montarZapFlutuante();
+  }
+
+  function montarZapFlutuante() {
+    if (documento.querySelector('.zap-flutuante')) return;
+    var a = documento.createElement('a');
+    a.className = 'zap-flutuante';
+    a.href = CFG.whatsappLink;
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', 'Disk Entrega no WhatsApp — ' + CFG.whatsapp);
+    a.innerHTML = icone('zap', 28);
+    documento.body.appendChild(a);
   }
 
   janela.Loja = {
@@ -614,6 +809,9 @@
     adicionar: adicionar, alterarQtd: alterarQtd, remover: remover, esvaziar: esvaziar,
     itensCarrinho: itensCarrinho, totalItens: totalItens, subtotal: subtotal,
     abrirGaveta: abrirGaveta, fecharGaveta: fecharGaveta,
+    clienteLogado: clienteLogado, entrar: entrar, sair: sair, saudacao: saudacao,
+    pedidos: pedidos, salvarPedido: salvarPedido, novoNumeroPedido: novoNumeroPedido,
+    enderecos: enderecos, salvarEndereco: salvarEndereco,
     ehFavorito: ehFavorito, alternarFavorito: alternarFavorito,
     registrarVisto: registrarVisto, vistosRecentemente: vistosRecentemente,
     calcularFrete: calcularFrete, mascaraCep: mascaraCep,

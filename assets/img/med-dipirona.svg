@@ -7,7 +7,7 @@
 <stop offset="0" stop-color="#0b3f38" stop-opacity=".22"/>
 <stop offset="1" stop-color="#0b3f38" stop-opacity="0"/>
 </radialGradient>
-<linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f8f80"/><stop offset=".45" stop-color="#7fcdc0"/><stop offset="1" stop-color="#2f8f80"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f4ba3"/><stop offset=".45" stop-color="#8fa3d6"/><stop offset="1" stop-color="#2f4ba3"/></linearGradient>
 </defs>
 <rect width="640" height="640" fill="url(#fundo)"/>
 <ellipse cx="320" cy="556" rx="168" ry="26" fill="url(#sombra)"/>
@@ -16,8 +16,8 @@
 <path d="M176 158 l42 -34 h246 l-42 34 z" fill="#ffffff" opacity=".55"/>
 <path d="M422 158 l42 -34 v352 l-42 34 z" fill="#0b3f38" opacity=".14"/>
 <rect x="196" y="186" width="206" height="150" rx="8" fill="#ffffff" opacity=".93"/>
-<rect x="196" y="186" width="206" height="7" rx="3.5" fill="#0c6b5e"/>
-<rect x="216" y="214" width="118" height="14" rx="7" fill="#0c6b5e"/>
+<rect x="196" y="186" width="206" height="7" rx="3.5" fill="#23397e"/>
+<rect x="216" y="214" width="118" height="14" rx="7" fill="#23397e"/>
 <rect x="216" y="240" width="160" height="9" rx="4" fill="#0b3f38" opacity=".55"/>
 <rect x="216" y="262" width="96" height="6" rx="3" fill="#0b3f38" opacity=".28"/>
 <rect x="216" y="290" width="140" height="6" rx="3" fill="#0b3f38" opacity=".20"/>
