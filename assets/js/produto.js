@@ -9,14 +9,21 @@
   var CFG = D.config;
 
   var parametros = new janela.URLSearchParams(janela.location.search);
-  var produto = D.porSku(parametros.get('sku') || '') ||
-                D.porSlug(parametros.get('slug') || '') ||
-                D.produtos[0];
 
+  /* resolvidos em montar(): o catálogo pode vir do banco depois deste script */
+  var produto = null;
   var variacaoAtual = null;
-  if (produto.variacoes) {
-    produto.variacoes.forEach(function (v) { if (v.padrao) variacaoAtual = v; });
-    if (!variacaoAtual) variacaoAtual = produto.variacoes[0];
+
+  function resolverProduto() {
+    produto = D.porSku(parametros.get('sku') || '') ||
+              D.porSlug(parametros.get('slug') || '') ||
+              D.produtos[0];
+
+    variacaoAtual = null;
+    if (produto.variacoes) {
+      produto.variacoes.forEach(function (v) { if (v.padrao) variacaoAtual = v; });
+      if (!variacaoAtual) variacaoAtual = produto.variacoes[0];
+    }
   }
 
   function precoAtual()   { return variacaoAtual ? variacaoAtual.preco   : produto.preco; }
@@ -560,6 +567,7 @@
 
   /* ------------------------------------------------------------ montagem */
   function montar() {
+    resolverProduto();
     L.iniciar(produto.categoria);
     trilha();
 
@@ -583,9 +591,6 @@
     L.registrarVisto(produto.sku);
   }
 
-  if (documento.readyState === 'loading') {
-    documento.addEventListener('DOMContentLoaded', montar);
-  } else {
-    montar();
-  }
+  /* espera o DOM e o catálogo (do banco, se configurado) */
+  janela.LojaAPI.pronto(montar);
 })(window, document);

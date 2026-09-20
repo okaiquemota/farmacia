@@ -8,7 +8,7 @@
   var L = janela.Loja;
   var CFG = D.config;
 
-  var FAQ = [
+  function construirFAQ() { return [
     ['Vocês entregam em casa?',
      'Sim. Hoje a entrega é pedida pelo Disk Entrega no WhatsApp ' + CFG.whatsapp +
      ', com número exclusivo para Ribeirão Preto. Com a loja online, o mesmo pedido passa a ' +
@@ -40,10 +40,12 @@
      'Sim. São 7 dias corridos a partir do recebimento para desistir da compra, conforme o ' +
      'Código de Defesa do Consumidor. Por segurança sanitária, medicamentos e produtos de ' +
      'higiene só são aceitos de volta com a embalagem lacrada e intacta.']
-  ];
+  ]; }
 
   /* --------------------------------------------------------------------- */
-  var PAGINAS = {
+  /* construído sob demanda: no carregamento do script o catálogo ainda
+     pode não ter chegado do banco */
+  function construirPaginas() { var FAQ = construirFAQ(); return {
     'quem-somos': {
       titulo: 'Quem somos',
       resumo: 'Mais de 50 anos cuidando da saúde no interior paulista.',
@@ -388,11 +390,12 @@
         '</form>' +
         '<p class="miudos">Encarregado de dados (DPO): privacidade@drogariasaocarlos.com.br</p>'
     }
-  };
+  }; }
 
   /* --------------------------------------------------------------------- */
   function montar() {
     var chave = new janela.URLSearchParams(janela.location.search).get('p') || 'quem-somos';
+    var PAGINAS = construirPaginas();
     var pagina = PAGINAS[chave] || PAGINAS['quem-somos'];
 
     L.iniciar('institucional');
@@ -460,7 +463,6 @@
     });
   }
 
-  if (documento.readyState === 'loading') {
-    documento.addEventListener('DOMContentLoaded', montar);
-  } else { montar(); }
+  /* espera o DOM e o catálogo (do banco, se configurado) */
+  janela.LojaAPI.pronto(montar);
 })(window, document);

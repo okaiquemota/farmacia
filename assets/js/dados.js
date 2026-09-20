@@ -36,7 +36,6 @@
       qtdAvaliacoes: 213,
       estoque: 18,
       destaque: true,
-      lancamento: false,
       tags: ['Mais vendido'],
       resumo: 'Creme de pentear sem enxágue que devolve maciez e controle aos fios ' +
               'ressecados por química, calor ou sol. Textura leve, não pesa e facilita ' +
@@ -533,6 +532,11 @@
     /* Disk Entrega divulgado pela rede, exclusivo de Ribeirão Preto */
     whatsapp: '(16) 4042-0778',
     whatsappLink: 'https://wa.me/551640420778',
+
+    /* Preencher para o catálogo passar a vir do banco em vez deste arquivo.
+       A chave publicável (anon) é pública por natureza: o que protege os
+       dados é o RLS do schema, não o segredo da chave. */
+    supabase: { url: '', chave: '', schema: 'farmacia' },
 
     razaoSocial: 'Razão social A CONFIRMAR',
     enderecoSede: 'endereço da sede A CONFIRMAR',

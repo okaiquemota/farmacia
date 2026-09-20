@@ -337,7 +337,6 @@
     });
   }
 
-  if (documento.readyState === 'loading') {
-    documento.addEventListener('DOMContentLoaded', montar);
-  } else { montar(); }
+  /* espera o DOM e o catálogo (do banco, se configurado) */
+  janela.LojaAPI.pronto(montar);
 })(window, document);

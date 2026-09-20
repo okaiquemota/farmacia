@@ -69,9 +69,12 @@ Sem parâmetros, `produto.html` abre o produto principal
 ```
 index.html      produto.html   categoria.html   carrinho.html
 checkout.html   conta.html     favoritos.html   institucional.html
+supabase/
+  migrations/          esquema e carga inicial do banco
 assets/
   css/estilos.css      tokens de design, componentes e responsivo
-  js/dados.js          catálogo: 14 produtos, 7 categorias, frete, cupons
+  js/dados.js          catálogo local e configuração da loja
+  js/api.js            carga do banco, com volta ao catálogo local
   js/loja.js           cabeçalho, rodapé, carrinho, favoritos, sessão, pedidos
   js/home.js  js/produto.js  js/categoria.js  js/carrinho.js
   js/checkout.js  js/conta.js  js/favoritos.js  js/institucional.js
@@ -104,6 +107,44 @@ Quase tudo vive em dois lugares:
 
 Logo e favicon estão em `assets/img/logo.svg`, `logo-claro.svg` e `favicon.svg`.
 
+## Banco de dados
+
+O catálogo vive hoje em `assets/js/dados.js`, mas o site já sabe ler de um
+banco. Em `supabase/migrations/` estão o esquema e a carga inicial:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `0001_schema.sql` | 9 tabelas no schema `farmacia`, índices, triggers e RLS |
+| `0002_carga_inicial.sql` | 7 categorias, 14 produtos, 17 lojas, 9 serviços, 3 cupons, 13 faixas de frete |
+
+Decisões que valem saber:
+
+- **Dinheiro em centavos.** Toda coluna monetária é `integer`. Reais em ponto
+  flutuante acumulam erro de arredondamento ao somar um carrinho, e `89.90`
+  não é exatamente `89.90` em binário. As variações de produto, guardadas em
+  JSONB, usam a mesma unidade.
+- **Coluna `ordem` nos produtos.** A vitrine tem sequência curada. Sem ela a
+  listagem sairia por SKU e embaralharia as prateleiras.
+- **RLS em todas as tabelas.** O catálogo é leitura pública; escrever nele só
+  com `service_role`, que ignora RLS. Pedido é do dono e de mais ninguém.
+  Avaliar exige conta — sem isso a caixa de comentários vira alvo de robô.
+- **Item de pedido guarda nome e preço.** O catálogo muda de preço; o pedido
+  antigo tem de continuar mostrando o que o cliente pagou.
+
+Para aplicar, preencha `config.supabase` em `dados.js`:
+
+```js
+supabase: { url: 'https://SEU-PROJETO.supabase.co', chave: 'sb_publishable_...', schema: 'farmacia' }
+```
+
+A chave publicável é pública por natureza — o que protege os dados é o RLS, não
+o segredo da chave. Exponha o schema `farmacia` em *Settings → API → Exposed
+schemas* do projeto.
+
+`assets/js/api.js` cuida da carga: converte as linhas do banco para a forma que
+as páginas esperam e substitui o catálogo em memória. Sem configuração, ou se a
+rede falhar, o site segue com o catálogo local — avisa no console e não quebra.
+
 ## Pagamento
 
 O checkout está pronto, mas nenhum provedor foi integrado — nenhuma cobrança
@@ -126,6 +167,13 @@ teclado, `aria-live` nos avisos e no resultado do frete, foco visível,
 alvos de toque adequados e suporte a `prefers-reduced-motion`.
 
 ## Testes
+
+O esquema é validado contra um Postgres real: as duas migrations são aplicadas
+do zero e 12 checagens confirmam as políticas de acesso — visitante lê o
+catálogo, não lê pedido, não escreve no catálogo, não avalia sem conta. Um teste
+de mapeamento pega as linhas reais do banco e confirma que o catálogo resultante
+é idêntico ao estático, campo a campo. Outro derruba o banco de propósito para
+garantir que a loja abre mesmo assim.
 
 A interface foi verificada com Playwright em 1360px e 390px, em duas suítes
 que somam mais de 100 checagens: renderização, busca, carrinho, variações de
